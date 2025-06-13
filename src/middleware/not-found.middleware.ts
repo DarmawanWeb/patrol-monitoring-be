@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
 export const notFoundHandler = (req: Request, res: Response) => {
   res.status(404).json({
-    error: "Not Found",
+    error: 'Not Found',
     message: `Route ${req.method} ${req.originalUrl} not found`,
     timestamp: new Date().toISOString(),
   });

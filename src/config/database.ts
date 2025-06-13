@@ -1,13 +1,13 @@
-import { Client } from "pg";
-import { Sequelize } from "sequelize";
-import logger from "@config/logger.js";
-import { env } from "@config/env.js";
+import { Client } from 'pg';
+import { Sequelize } from 'sequelize';
+import logger from '@config/logger.js';
+import { env } from '@config/env.js';
 
 const ensureDatabaseExists = async () => {
   const client = new Client({
     user: env.database.user,
     host: env.database.host,
-    database: "postgres",
+    database: 'postgres',
     password: env.database.password,
     port: env.database.port,
   });
@@ -15,7 +15,7 @@ const ensureDatabaseExists = async () => {
   try {
     await client.connect();
     const res = await client.query(
-      `SELECT 1 FROM pg_database WHERE datname = '${env.database.name}'`
+      `SELECT 1 FROM pg_database WHERE datname = '${env.database.name}'`,
     );
     if (res.rowCount === 0) {
       logger.info(`Database ${env.database.name} does not exist. Creating...`);
@@ -25,7 +25,7 @@ const ensureDatabaseExists = async () => {
       logger.info(`Database ${env.database.name} already exists.`);
     }
   } catch (error) {
-    logger.error("Error ensuring database exists:", error);
+    logger.error('Error ensuring database exists:', error);
   } finally {
     await client.end();
   }
@@ -38,9 +38,9 @@ const sequelize = new Sequelize(
   {
     host: env.database.host,
     port: env.database.port,
-    dialect: "postgres",
+    dialect: 'postgres',
     logging: false,
-  }
+  },
 );
 
 export const syncDatabase = async () => {
@@ -48,12 +48,12 @@ export const syncDatabase = async () => {
   try {
     await sequelize.authenticate();
     logger.info(
-      "Connection to the database has been established successfully."
+      'Connection to the database has been established successfully.',
     );
     await sequelize.sync({ force: false });
-    logger.info("Database synchronized successfully.");
+    logger.info('Database synchronized successfully.');
   } catch (error) {
-    logger.error("Unable to connect to the database:", error);
+    logger.error('Unable to connect to the database:', error);
     throw error;
   }
 };

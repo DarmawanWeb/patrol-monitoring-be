@@ -1,8 +1,8 @@
-import express from "express";
-import { setupMiddleware, setupErrorHandlers } from "@middleware/index.js";
-import { Router, Request, Response } from "express";
+import express from 'express';
+import { setupMiddleware, setupErrorHandlers } from '@middleware/index.js';
+import { Request, Response } from 'express';
 
-import v1Routes from "@/routes/index.js";
+import v1Routes from '@/routes/index.js';
 
 const createApp = (): express.Application => {
   const app = express();
@@ -11,11 +11,11 @@ const createApp = (): express.Application => {
   setupMiddleware(app);
 
   // Routes
-  app.use("/api", v1Routes);
+  app.use('/api', v1Routes);
 
-  app.get("/", (req: Request, res: Response) => {
+  app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
-      message: "Welcome to the API",
+      message: 'Welcome to the API',
       timestamp: new Date().toISOString(),
     });
   });

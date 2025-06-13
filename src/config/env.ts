@@ -1,6 +1,6 @@
-import { config } from "dotenv";
+import { config } from 'dotenv';
 
-const envFile = `.env.${process.env.NODE_ENV || "development"}`;
+const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
 config({ path: envFile });
 
 interface EnvConfig {
@@ -26,21 +26,21 @@ interface EnvConfig {
 const getEnvConfig = (): EnvConfig => {
   return {
     app: {
-      port: parseInt(process.env.PORT || "3000", 10),
-      env: process.env.NODE_ENV || "development",
+      port: parseInt(process.env.PORT || '3000', 10),
+      env: process.env.NODE_ENV || 'development',
     },
     database: {
-      host: process.env.DB_HOST || "localhost",
-      port: parseInt(process.env.DB_PORT || "5432"),
-      user: process.env.DB_USER || "user",
-      password: process.env.DB_PASSWORD || "password",
-      name: process.env.DB_NAME || "database",
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432'),
+      user: process.env.DB_USER || 'user',
+      password: process.env.DB_PASSWORD || 'password',
+      name: process.env.DB_NAME || 'database',
     },
     cors: {
-      origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+      origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
     },
     jwt: {
-      secret: process.env.JWT_SECRET || "default-secret",
+      secret: process.env.JWT_SECRET || 'default-secret',
     },
   };
 };

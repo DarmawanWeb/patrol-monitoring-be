@@ -1,15 +1,15 @@
-import { Router, Request, Response } from "express";
-import { env } from "@config/env.js";
+import { Router, Request, Response } from 'express';
+import { env } from '@config/env.js';
 
 const router: Router = Router();
 
-router.get("/", (req: Request, res: Response) => {
+router.get('/', (req: Request, res: Response) => {
   res.status(200).json({
-    status: "OK",
+    status: 'OK',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     environment: env.app.env,
-    version: process.env.npm_package_version || "1.0.0",
+    version: process.env.npm_package_version || '1.0.0',
   });
 });
 
