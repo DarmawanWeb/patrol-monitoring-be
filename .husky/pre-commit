@@ -1,3 +1,2 @@
-#!/bin/sh
 lint-staged
 echo "Pre-commit checks passed. Proceeding with commit."
