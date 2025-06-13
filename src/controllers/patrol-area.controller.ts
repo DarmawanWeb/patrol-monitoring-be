@@ -7,7 +7,7 @@ import { CreatePatrolAreaData } from '@/types/patrol-area.js';
 const patrolAreaService = new PatrolAreaService();
 
 const patrolAreaImagePath = './uploads/patrol_areas';
-const upload = createUpload(patrolAreaImagePath);
+const upload = createUpload(patrolAreaImagePath, ['image/jpeg', 'image/png']);
 
 export const createPatrolAreaController = async (
   req: Request,

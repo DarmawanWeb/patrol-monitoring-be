@@ -2,8 +2,6 @@ import multer, { StorageEngine, FileFilterCallback } from 'multer';
 import path from 'path';
 import fs from 'fs';
 
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
-
 const storage = (uploadPath: string): StorageEngine => {
   return multer.diskStorage({
     destination: (req, file, cb) => {
@@ -19,24 +17,28 @@ const storage = (uploadPath: string): StorageEngine => {
   });
 };
 
-const fileFilter = (
-  req: Express.Request,
-  file: Express.Multer.File,
-  cb: FileFilterCallback,
-) => {
-  if (ALLOWED_TYPES.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error('Invalid file type. Only JPEG, PNG, and GIF are allowed.'));
-  }
-};
+const createUpload = (uploadPath: string, allowedTypes: string[]) => {
+  const fileFilter = (
+    req: Express.Request,
+    file: Express.Multer.File,
+    cb: FileFilterCallback,
+  ) => {
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(
+        new Error(
+          `Invalid file type. Only ${allowedTypes.join(', ')} are allowed.`,
+        ),
+      );
+    }
+  };
 
-const createUpload = (uploadPath: string) => {
   return multer({
     storage: storage(uploadPath),
     fileFilter,
     limits: {
-      fileSize: 5 * 1024 * 1024,
+      fileSize: 5 * 1024 * 1024, // 5 MB
     },
   });
 };
