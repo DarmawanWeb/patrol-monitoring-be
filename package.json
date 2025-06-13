@@ -1,0 +1,21 @@
+{
+  "name": "patrol-management-system-be",
+  "version": "1.0.0",
+  "description": "Backend for Patrol Management System",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "patrol",
+    "management",
+    "system",
+    "backend"
+  ],
+  "author": "@agus-darmawan",
+  "contributors": [
+    "@agus-darmawan"
+  ],
+  "license": "Proprietary License",
+  "packageManager": "pnpm@10.6.2"
+}
