@@ -4,7 +4,47 @@
   "description": "Backend for Patrol Management System",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch --clear-screen=false src/bin/www.ts",
+    "dev:debug": "tsx watch --inspect src/bin/www.ts",
+    "build": "tsc",
+    "start": "node dist/bin/www.js",
+    "start:prod": "NODE_ENV=production node dist/bin/www.js",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "format:check": "prettier --check src/**/*.ts",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:seed": "sequelize-cli db:seed:all",
+    "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",
+    "prepare": "husky install"
+  },
+  "packageManager": "pnpm@10.6.2",
+  "dependencies": {
+    "compression": "^1.8.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.16.0",
+    "pino": "^9.7.0",
+    "pino-pretty": "^13.0.0",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.8.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^24.0.1",
+    "@types/pg": "^8.15.4",
+    "@types/sequelize": "^4.28.20",
+    "tsc-alias": "^1.8.16",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.20.2",
+    "typescript": "^5.8.3"
   },
   "keywords": [
     "patrol",
@@ -16,6 +56,5 @@
   "contributors": [
     "@agus-darmawan"
   ],
-  "license": "Proprietary License",
-  "packageManager": "pnpm@10.6.2"
+  "license": "Proprietary License"
 }
