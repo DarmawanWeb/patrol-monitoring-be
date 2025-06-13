@@ -18,8 +18,13 @@ interface EnvConfig {
   cors: {
     origin: string;
   };
-  jwt?: {
+  jwt: {
     secret: string;
+    expiration: string;
+  };
+  refreshToken: {
+    secret: string;
+    expiration: string;
   };
 }
 
@@ -41,6 +46,11 @@ const getEnvConfig = (): EnvConfig => {
     },
     jwt: {
       secret: process.env.JWT_SECRET || 'default-secret',
+      expiration: process.env.JWT_EXPIRATION || '1h',
+    },
+    refreshToken: {
+      secret: process.env.REFRESH_TOKEN_SECRET || 'default-refresh-secret',
+      expiration: process.env.REFRESH_TOKEN_EXPIRATION || '30d',
     },
   };
 };
