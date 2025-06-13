@@ -1,8 +1,8 @@
 import express from "express";
-import { setupMiddleware, setupErrorHandlers } from "@middleware/index";
+import { setupMiddleware, setupErrorHandlers } from "@middleware/index.js";
 import { Router, Request, Response } from "express";
 
-import v1Routes from "@/routes";
+import v1Routes from "@/routes/index.js";
 
 const createApp = (): express.Application => {
   const app = express();

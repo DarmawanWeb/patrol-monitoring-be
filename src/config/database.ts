@@ -1,7 +1,7 @@
 import { Client } from "pg";
 import { Sequelize } from "sequelize";
-import logger from "@config/logger";
-import { env } from "@config/env";
+import logger from "@config/logger.js";
+import { env } from "@config/env.js";
 
 const ensureDatabaseExists = async () => {
   const client = new Client({

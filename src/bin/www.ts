@@ -1,8 +1,8 @@
-import createApp from "app";
-import { syncDatabase } from "@config/database";
-import logger from "@config/logger";
-import { env } from "@config/env";
-import { findAvailablePort } from "@utils/port";
+import createApp from "@/app.js";
+import { syncDatabase } from "@config/database.js";
+import logger from "@config/logger.js";
+import { env } from "@config/env.js";
+import { findAvailablePort } from "@utils/port.js";
 
 const startServer = async (): Promise<void> => {
   try {

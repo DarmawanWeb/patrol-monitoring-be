@@ -2,23 +2,13 @@
   "name": "patrol-management-system-be",
   "version": "1.0.0",
   "description": "Backend for Patrol Management System",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "tsx watch --clear-screen=false src/bin/www.ts",
     "dev:debug": "tsx watch --inspect src/bin/www.ts",
-    "build": "tsc",
+    "build": "npx tsc && tsc-alias",
     "start": "node dist/bin/www.js",
-    "start:prod": "NODE_ENV=production node dist/bin/www.js",
-    "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint src/**/*.ts --fix",
-    "format": "prettier --write src/**/*.ts",
-    "format:check": "prettier --check src/**/*.ts",
-    "type-check": "tsc --noEmit",
-    "clean": "rm -rf dist",
-    "db:migrate": "sequelize-cli db:migrate",
-    "db:seed": "sequelize-cli db:seed:all",
-    "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",
-    "prepare": "husky install"
+    "start:prod": "NODE_ENV=production node dist/bin/www.js"
   },
   "packageManager": "pnpm@10.6.2",
   "dependencies": {

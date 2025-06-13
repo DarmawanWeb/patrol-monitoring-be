@@ -1,5 +1,5 @@
 import morgan from "morgan";
-import logger from "@config/logger";
+import logger from "@config/logger.js";
 import type { Request, Response } from "express";
 
 morgan.token("response-time", (_req: Request, res: Response) => {
