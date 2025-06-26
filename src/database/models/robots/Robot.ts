@@ -13,7 +13,7 @@ Robot.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    image: {
+    imagePath: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -22,14 +22,6 @@ Robot.init(
       allowNull: false,
       references: {
         model: 'robot_types',
-        key: 'id',
-      },
-    },
-    areaId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'patrol_areas',
         key: 'id',
       },
     },

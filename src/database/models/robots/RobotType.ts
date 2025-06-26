@@ -17,8 +17,8 @@ RobotType.init(
   },
   {
     sequelize,
-    modelName: 'Robot',
-    tableName: 'robots',
+    modelName: 'RobotType',
+    tableName: 'robot_types',
     timestamps: true,
   },
 );
