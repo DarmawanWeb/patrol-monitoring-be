@@ -6,7 +6,8 @@ class Robot extends Model {}
 Robot.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
     name: {
