@@ -1,57 +1,101 @@
-import { Request, Response } from 'express';
 import fs from 'fs';
-import path from 'path';
-import RobotService from '@/services/robots/robot.service.js';
-import { handleError } from '@/utils/error.handler.js';
+import type { Request, Response } from 'express';
+
+import logger from '@/config/logger';
+
 import createUpload from '@/utils/file.upload.js';
+import { handleError } from '@/utils/error.handler.js';
+import { ValidationError } from '@/utils/base.error.js';
+
+import RobotService from '@/services/robots/robot.service.js';
 
 const robotService = new RobotService();
-const tempUpload = createUpload('./uploads/temp', ['image/jpeg', 'image/png']);
+const tempUpload = createUpload('./uploads/temp', [
+  'image/jpeg',
+  'image/png',
+  'image/jpg',
+]);
 
-export const createRobotController = async (req: Request, res: Response) => {
-  tempUpload.single('image')(req, res, async (err) => {
-    if (err || !req.file) {
+interface CreateRobotBody {
+  name: string;
+  typeId: string;
+  description?: string;
+}
+
+interface UpdateRobotBody {
+  name?: string;
+  typeId?: string;
+  description?: string;
+}
+
+const cleanupTempFile = (filePath?: string): void => {
+  if (filePath && fs.existsSync(filePath)) {
+    try {
+      fs.unlinkSync(filePath);
+    } catch (error) {
+      logger.error(`Failed to delete temporary file: ${filePath}`, error);
+    }
+  }
+};
+
+export const createRobotController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  tempUpload.single('image')(req, res, async (err: unknown) => {
+    if (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Image upload error';
       res.status(400).json({
-        message: err instanceof Error ? err.message : 'Image upload error',
+        message: errorMessage,
+        success: false,
+      });
+      return;
+    }
+
+    if (!req.file) {
+      res.status(400).json({
+        message: 'Image file is required',
         success: false,
       });
       return;
     }
 
     try {
-      const { name, typeId, description } = req.body;
+      const { name, typeId, description } = req.body as CreateRobotBody;
+      if (!name || !typeId) {
+        throw new ValidationError('Name and type ID are required');
+      }
 
-      const robot = await robotService.createRobot({
-        name,
-        typeId: parseInt(typeId),
-        imagePath: '',
-        description,
-      });
+      const parsedTypeId = parseInt(typeId, 10);
+      if (isNaN(parsedTypeId)) {
+        throw new ValidationError('Type ID must be a valid number');
+      }
 
-      const folderPath = `./uploads/robots/${robot.id}`;
-      fs.mkdirSync(folderPath, { recursive: true });
-
-      const ext = path.extname(req.file.originalname);
-      const finalPath = path.join(folderPath, `image${ext}`);
-      fs.renameSync(req.file.path, finalPath);
-
-      const updated = await robotService.updateRobot(robot.id, {
-        imagePath: finalPath,
+      const result = await robotService.createRobotWithImage({
+        name: name.trim(),
+        typeId: parsedTypeId,
+        description: description?.trim(),
+        tempFilePath: req.file.path,
+        originalName: req.file.originalname,
       });
 
       res.status(201).json({
         message: 'Robot created successfully',
-        data: updated,
+        data: result,
         success: true,
       });
     } catch (error) {
-      fs.unlinkSync(req.file.path);
+      cleanupTempFile(req.file?.path);
       handleError(error, res);
     }
   });
 };
 
-export const getAllRobotsController = async (_req: Request, res: Response) => {
+export const getAllRobotsController = async (
+  _req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const robots = await robotService.getAllRobots();
     res.status(200).json({
@@ -64,16 +108,22 @@ export const getAllRobotsController = async (_req: Request, res: Response) => {
   }
 };
 
-export const getRobotByIdController = async (req: Request, res: Response) => {
+export const getRobotByIdController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
-    if (!req.params.id) {
+    const { id } = req.params;
+
+    if (!id) {
       res.status(400).json({
         message: 'Robot ID is required',
         success: false,
       });
       return;
     }
-    const robot = await robotService.getRobotById(req.params.id);
+
+    const robot = await robotService.getRobotById(id);
     res.status(200).json({
       message: 'Robot retrieved successfully',
       data: robot,
@@ -84,37 +134,76 @@ export const getRobotByIdController = async (req: Request, res: Response) => {
   }
 };
 
-export const updateRobotController = async (req: Request, res: Response) => {
-  try {
-    if (!req.params.id) {
+export const updateRobotController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  tempUpload.single('image')(req, res, async (err: unknown) => {
+    if (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Upload error';
       res.status(400).json({
-        message: 'Robot ID is required',
+        message: errorMessage,
         success: false,
       });
       return;
     }
-    const robot = await robotService.updateRobot(req.params.id, req.body);
-    res.status(200).json({
-      message: 'Robot updated successfully',
-      data: robot,
-      success: true,
-    });
-  } catch (error) {
-    handleError(error, res);
-  }
+
+    try {
+      const { id } = req.params;
+      const { name, typeId, description } = req.body as UpdateRobotBody;
+
+      if (!id) {
+        throw new ValidationError('Robot ID is required');
+      }
+
+      let parsedTypeId: number | undefined;
+      if (typeId) {
+        parsedTypeId = parseInt(typeId, 10);
+        if (isNaN(parsedTypeId)) {
+          throw new ValidationError('Type ID must be a valid number');
+        }
+      }
+
+      const result = await robotService.updateRobotWithImage(id, {
+        name: name?.trim(),
+        typeId: parsedTypeId,
+        description: description?.trim(),
+        newFilePath: req.file?.path,
+        originalName: req.file?.originalname,
+      });
+
+      res.status(200).json({
+        message: 'Robot updated successfully',
+        data: result,
+        success: true,
+      });
+    } catch (error) {
+      cleanupTempFile(req.file?.path);
+      handleError(error, res);
+    }
+  });
 };
 
-export const deleteRobotController = async (req: Request, res: Response) => {
+export const deleteRobotController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
-    if (!req.params.id) {
+    const { id } = req.params;
+
+    if (!id) {
       res.status(400).json({
         message: 'Robot ID is required',
         success: false,
       });
       return;
     }
-    const result = await robotService.deleteRobot(req.params.id);
-    res.status(200).json({ ...result, success: true });
+
+    const result = await robotService.deleteRobot(id);
+    res.status(200).json({
+      ...result,
+      success: true,
+    });
   } catch (error) {
     handleError(error, res);
   }
