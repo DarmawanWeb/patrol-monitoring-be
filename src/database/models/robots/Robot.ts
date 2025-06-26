@@ -7,7 +7,6 @@ import {
   ForeignKey,
 } from 'sequelize';
 import sequelize from '@/config/database.js';
-import RobotType from './RobotType.js';
 
 interface RobotModel
   extends Model<
@@ -83,8 +82,5 @@ Robot.init(
     timestamps: true,
   },
 );
-
-Robot.belongsTo(RobotType, { foreignKey: 'typeId', as: 'type' });
-RobotType.hasMany(Robot, { foreignKey: 'typeId', as: 'robots' });
 
 export default Robot;

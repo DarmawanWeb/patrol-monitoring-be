@@ -1,5 +1,5 @@
-import Robot from './Robot.js';
-import RobotType from './RobotType.js';
+import Robot from './Robot';
+import RobotType from './RobotType';
 
 Robot.belongsTo(RobotType, { foreignKey: 'typeId', as: 'type' });
 RobotType.hasMany(Robot, { foreignKey: 'typeId', as: 'robots' });
