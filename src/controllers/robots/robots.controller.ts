@@ -24,7 +24,7 @@ export const createRobotController = async (req: Request, res: Response) => {
       const robot = await robotService.createRobot({
         name,
         typeId: parseInt(typeId),
-        imagePath: '', // placeholder
+        imagePath: '',
         description,
       });
 
