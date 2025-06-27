@@ -25,3 +25,26 @@ export async function getAllRobotRoutesController(
     handleError(err, res);
   }
 }
+
+export async function getRobotRouteByIdController(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  try {
+    const id = String(req.params.id || '');
+    const { limit, startDate, endDate } = parseRoutesQuery(req.query);
+    const route = await robotWebsocketService.getRobotRouteById(
+      id,
+      limit,
+      startDate,
+      endDate,
+    );
+    res.status(200).json({
+      success: true,
+      message: 'Robot route retrieved successfully',
+      data: route,
+    });
+  } catch (err) {
+    handleError(err, res);
+  }
+}

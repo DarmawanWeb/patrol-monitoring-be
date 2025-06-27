@@ -1,5 +1,6 @@
 import logger from '@/config/logger';
 import { Robot, RobotWebsocket } from '@/database/models/robots/index.js';
+import { NotFoundError } from '@/utils/base.error.js';
 import type {
   WebSocketRobotData,
   RobotRouteData,
@@ -83,7 +84,7 @@ export default class RobotWebsocketService {
   }
 
   async getRobotRouteById(
-    robotId: number,
+    robotId: string,
     limit = 1000,
     startTime?: Date,
     endTime?: Date,
@@ -95,10 +96,8 @@ export default class RobotWebsocketService {
       });
 
       if (!robot) {
-        logger.warn(`Robot with ID "${robotId}" not found.`);
-        return null;
+        throw new NotFoundError(`Robot with ID "${robotId}" not found`);
       }
-
       return this.transformRobotWithWebsockets(robot);
     } catch (error) {
       logger.error(

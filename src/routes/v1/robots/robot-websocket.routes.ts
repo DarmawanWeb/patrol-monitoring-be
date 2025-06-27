@@ -5,7 +5,10 @@ import { uuidParamValidator } from '@/validators/general.validators';
 import { validationMiddleware } from '@/middleware/validation.middleware.js';
 import { robotWebsocketQueryValidators } from '@/validators/robots/robot-websocket.validator';
 
-import { getAllRobotRoutesController } from '@/controllers/robots/robot-websockets.controller.js';
+import {
+  getAllRobotRoutesController,
+  getRobotRouteByIdController,
+} from '@/controllers/robots/robot-websockets.controller.js';
 
 const router: Router = express.Router();
 
@@ -23,7 +26,7 @@ router.get(
   uuidParamValidator,
   robotWebsocketQueryValidators,
   validationMiddleware,
-  getAllRobotRoutesController,
+  getRobotRouteByIdController,
 );
 
 export default router;
