@@ -10,10 +10,12 @@ export const createRobotTypeController = async (
 ) => {
   try {
     const result = await service.createRobotType(req.body);
-    res
-      .status(201)
-      .json({ message: 'Created successfully', data: result, success: true });
-  } catch (error) {
+    res.status(201).json({
+      message: 'Robot type created successfully',
+      data: result,
+      success: true,
+    });
+  } catch (error: unknown) {
     handleError(error, res);
   }
 };
@@ -24,9 +26,11 @@ export const getAllRobotTypesController = async (
 ) => {
   try {
     const result = await service.getAllRobotTypes();
-    res
-      .status(200)
-      .json({ message: 'Retrieved successfully', data: result, success: true });
+    res.status(200).json({
+      message: 'All robot type retrieved successfully',
+      data: result,
+      success: true,
+    });
   } catch (error) {
     handleError(error, res);
   }
@@ -39,9 +43,11 @@ export const getRobotTypeByIdController = async (
   try {
     const id = parseInt(req.params.id || '0');
     const result = await service.getRobotTypeById(id);
-    res
-      .status(200)
-      .json({ message: 'Retrieved successfully', data: result, success: true });
+    res.status(200).json({
+      message: 'Robot type retrieved successfully',
+      data: result,
+      success: true,
+    });
   } catch (error) {
     handleError(error, res);
   }
@@ -54,9 +60,11 @@ export const updateRobotTypeController = async (
   try {
     const id = parseInt(req.params.id || '0');
     const result = await service.updateRobotType(id, req.body);
-    res
-      .status(200)
-      .json({ message: 'Updated successfully', data: result, success: true });
+    res.status(200).json({
+      message: `Robot type with id ${id} pdated successfully`,
+      data: result,
+      success: true,
+    });
   } catch (error) {
     handleError(error, res);
   }
@@ -68,8 +76,11 @@ export const deleteRobotTypeController = async (
 ) => {
   try {
     const id = parseInt(req.params.id || '0');
-    const result = await service.deleteRobotType(id);
-    res.status(200).json({ ...result, success: true });
+    await service.deleteRobotType(id);
+    res.status(200).json({
+      message: `Robot type with id ${id} deleted successfully`,
+      success: true,
+    });
   } catch (error) {
     handleError(error, res);
   }

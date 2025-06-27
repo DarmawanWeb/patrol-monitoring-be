@@ -3,6 +3,7 @@ import { syncDatabase } from '@config/database.js';
 import logger from '@config/logger.js';
 import { env } from '@config/env.js';
 import { findAvailablePort } from '@utils/port.js';
+import socketServer from '@/config/ws';
 
 const startServer = async (): Promise<void> => {
   try {
@@ -14,6 +15,9 @@ const startServer = async (): Promise<void> => {
     // Create Express app
     const app = createApp();
 
+    socketServer.listen(8082, () => {
+      logger.info(`Socket.IO server is running on ws://localhost:${8082}`);
+    });
     // Find available port
     const availablePort = await findAvailablePort(env.app.port);
 

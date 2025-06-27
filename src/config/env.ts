@@ -26,6 +26,7 @@ interface EnvConfig {
     secret: string;
     expiration: string;
   };
+  wensocketPort?: number;
 }
 
 const getEnvConfig = (): EnvConfig => {

@@ -50,7 +50,7 @@ export const syncDatabase = async () => {
     logger.info(
       'Connection to the database has been established successfully.',
     );
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: false });
     logger.info('Database synchronized successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
