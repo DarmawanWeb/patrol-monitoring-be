@@ -19,21 +19,37 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            export PNPM_HOME="$HOME/.local/share/pnpm"
-            export PATH="$PNPM_HOME:$PATH"
-
+            echo "➡️ Masuk ke direktori aplikasi"
             cd ${{ secrets.APP_PATH }}
+
+            echo "🔄 Menarik perubahan terbaru dari Git"
             git pull origin main
 
-            if ! command -v pnpm &> /dev/null; then
-              echo "Installing pnpm..."
-              curl -fsSL https://get.pnpm.io/install.sh | sh -
-              export PATH="$HOME/.local/share/pnpm:$PATH"
+            echo "📦 Memastikan .bashrc dijalankan untuk akses node, pnpm, dan pm2"
+            if [ -f ~/.bashrc ]; then
+              source ~/.bashrc
             fi
 
+            echo "📍 Menyeting PATH untuk pnpm jika diperlukan"
+            export PNPM_HOME="$HOME/.local/share/pnpm"
+            export PATH="$PNPM_HOME:$PATH:$PATH"
+
+            echo "📥 Menginstall dependensi"
             pnpm install
+
+            echo "🏗️ Membuild project"
             pnpm build
 
+            echo "📄 Menyalin file .env ke dalam dist/"
             cp .env dist/.env
 
-            pm2 restart ${{ secrets.APP_ID }} || pm2 start dist/index.js --name "${{ secrets.APP_ID }}"
+            echo "🚦 Menjalankan atau me-restart aplikasi menggunakan PM2"
+            pm2 describe patrol-be > /dev/null
+
+            if [ $? -eq 0 ]; then
+              echo "🔁 Restarting existing PM2 process..."
+              pm2 restart patrol-be --update-env
+            else
+              echo "🚀 Starting new PM2 process with pnpm start"
+              pm2 start pnpm --name "patrol-be" -- start
+            fi

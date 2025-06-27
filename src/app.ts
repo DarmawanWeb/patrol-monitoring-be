@@ -17,8 +17,10 @@ const createApp = (): express.Application => {
 
   app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
-      message: 'Welcome to the API',
+      message: 'Welcome to the Patrol BE API',
       timestamp: new Date().toISOString(),
+      author: 'I Wayan Agus Darmawan',
+      version: '1.0.0',
     });
   });
 
