@@ -17,7 +17,10 @@ const cleanupTempFile = (filePath?: string): void => {
     try {
       fs.unlinkSync(filePath);
     } catch (error) {
-      logger.error(`Failed to delete temporary file: ${filePath}`, error);
+      logger.error(
+        `Failed to delete temporary file: ${filePath}`,
+        error as Error,
+      );
     }
   }
 };

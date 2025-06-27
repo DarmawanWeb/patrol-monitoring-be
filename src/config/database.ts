@@ -25,7 +25,7 @@ const ensureDatabaseExists = async () => {
       logger.info(`Database ${env.database.name} already exists.`);
     }
   } catch (error) {
-    logger.error('Error ensuring database exists:', error);
+    logger.error('Error ensuring database exists:', error as Error);
   } finally {
     await client.end();
   }
@@ -53,7 +53,7 @@ export const syncDatabase = async () => {
     await sequelize.sync({ force: false });
     logger.info('Database synchronized successfully.');
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    logger.error('Unable to connect to the database:', error as Error);
     throw error;
   }
 };

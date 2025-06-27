@@ -1,5 +1,5 @@
 import http from 'http';
-import logger from './logger';
+import logger from './logger.js';
 import { Server } from 'socket.io';
 import { env } from 'process';
 
@@ -19,11 +19,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on('robot:data', (robotData) => {
+    logger.info(`Received robot data from socket ${socket.id}:`, robotData);
     socket.broadcast.emit('robot:data', robotData);
   });
 
   socket.on('error', (error: Error) => {
-    logger.error(`Socket error: ${error.message}`);
+    logger.error('Socket error', error.message);
   });
 
   socket.on('disconnect', () => {
