@@ -1,5 +1,4 @@
-import RobotType from '@/database/models/robots/RobotType.js';
-import Robot from '@/database/models/robots/Robot.js';
+import { RobotType, Robot } from '@/database/models/robots/index.js';
 import { NotFoundError, ValidationError } from '@/utils/base.error.js';
 import type { IRobotType, RobotTypeInput } from '@/types/robot-type.js';
 

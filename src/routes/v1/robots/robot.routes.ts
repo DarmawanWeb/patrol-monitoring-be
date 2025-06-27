@@ -1,4 +1,8 @@
 import express, { Router } from 'express';
+
+import { authMiddleware } from '@/middleware/auth.middleware.js';
+import { validationMiddleware } from '@/middleware/validation.middleware.js';
+
 import {
   createRobotController,
   deleteRobotController,
@@ -6,16 +10,32 @@ import {
   getRobotByIdController,
   updateRobotController,
 } from '@/controllers/robots/robots.controller.js';
-import { authMiddleware } from '@/middleware/auth.middleware.js';
+import { uuidParamValidator } from '@/validators/general.validators';
 
 const router: Router = express.Router();
 
 router.use(authMiddleware);
 
 router.get('/', getAllRobotsController);
-router.get('/:id', getRobotByIdController);
+router.get(
+  '/:id',
+  uuidParamValidator,
+  validationMiddleware,
+  getRobotByIdController,
+);
 router.post('/', createRobotController);
-router.put('/:id', updateRobotController);
-router.delete('/:id', deleteRobotController);
+
+router.put(
+  '/:id',
+  uuidParamValidator,
+  validationMiddleware,
+  updateRobotController,
+);
+router.delete(
+  '/:id',
+  uuidParamValidator,
+  validationMiddleware,
+  deleteRobotController,
+);
 
 export default router;

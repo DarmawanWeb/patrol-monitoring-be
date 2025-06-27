@@ -4,4 +4,4 @@ import RobotType from './RobotType';
 Robot.belongsTo(RobotType, { foreignKey: 'typeId', as: 'type' });
 RobotType.hasMany(Robot, { foreignKey: 'typeId', as: 'robots' });
 
-export default Robot;
+export { Robot, RobotType };

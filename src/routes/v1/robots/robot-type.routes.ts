@@ -32,6 +32,7 @@ router.post(
 );
 router.put(
   '/:id',
+  idParamValidator,
   robotTypeValidators,
   validationMiddleware,
   updateRobotTypeController,

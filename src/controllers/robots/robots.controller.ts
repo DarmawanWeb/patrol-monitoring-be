@@ -1,12 +1,8 @@
 import fs from 'fs';
-import type { Request, Response } from 'express';
-
 import logger from '@/config/logger';
-
+import type { Request, Response } from 'express';
 import createUpload from '@/utils/file.upload.js';
 import { handleError } from '@/utils/error.handler.js';
-import { ValidationError } from '@/utils/base.error.js';
-
 import RobotService from '@/services/robots/robot.service.js';
 
 const robotService = new RobotService();
@@ -15,18 +11,6 @@ const tempUpload = createUpload('./uploads/temp', [
   'image/png',
   'image/jpg',
 ]);
-
-interface CreateRobotBody {
-  name: string;
-  typeId: string;
-  description?: string;
-}
-
-interface UpdateRobotBody {
-  name?: string;
-  typeId?: string;
-  description?: string;
-}
 
 const cleanupTempFile = (filePath?: string): void => {
   if (filePath && fs.existsSync(filePath)) {
@@ -62,19 +46,10 @@ export const createRobotController = async (
     }
 
     try {
-      const { name, typeId, description } = req.body as CreateRobotBody;
-      if (!name || !typeId) {
-        throw new ValidationError('Name and type ID are required');
-      }
-
-      const parsedTypeId = parseInt(typeId, 10);
-      if (isNaN(parsedTypeId)) {
-        throw new ValidationError('Type ID must be a valid number');
-      }
-
+      const { name, typeId, description } = req.body;
       const result = await robotService.createRobotWithImage({
         name: name.trim(),
-        typeId: parsedTypeId,
+        typeId: typeId,
         description: description?.trim(),
         tempFilePath: req.file.path,
         originalName: req.file.originalname,
@@ -113,16 +88,7 @@ export const getRobotByIdController = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { id } = req.params;
-
-    if (!id) {
-      res.status(400).json({
-        message: 'Robot ID is required',
-        success: false,
-      });
-      return;
-    }
-
+    const id = String(req.params.id || '');
     const robot = await robotService.getRobotById(id);
     res.status(200).json({
       message: 'Robot retrieved successfully',
@@ -149,24 +115,12 @@ export const updateRobotController = async (
     }
 
     try {
-      const { id } = req.params;
-      const { name, typeId, description } = req.body as UpdateRobotBody;
-
-      if (!id) {
-        throw new ValidationError('Robot ID is required');
-      }
-
-      let parsedTypeId: number | undefined;
-      if (typeId) {
-        parsedTypeId = parseInt(typeId, 10);
-        if (isNaN(parsedTypeId)) {
-          throw new ValidationError('Type ID must be a valid number');
-        }
-      }
+      const id = String(req.params.id || '');
+      const { name, typeId, description } = req.body;
 
       const result = await robotService.updateRobotWithImage(id, {
         name: name?.trim(),
-        typeId: parsedTypeId,
+        typeId: typeId,
         description: description?.trim(),
         newFilePath: req.file?.path,
         originalName: req.file?.originalname,
@@ -189,19 +143,10 @@ export const deleteRobotController = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { id } = req.params;
-
-    if (!id) {
-      res.status(400).json({
-        message: 'Robot ID is required',
-        success: false,
-      });
-      return;
-    }
-
-    const result = await robotService.deleteRobot(id);
+    const id = String(req.params.id || '');
+    await robotService.deleteRobot(id);
     res.status(200).json({
-      ...result,
+      message: `Robot with id ${id} deleted successfully`,
       success: true,
     });
   } catch (error) {

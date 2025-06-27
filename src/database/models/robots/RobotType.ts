@@ -43,7 +43,7 @@ RobotType.init(
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [1, 100],
+        len: [5, 50],
       },
     },
     createdAt: DataTypes.DATE,

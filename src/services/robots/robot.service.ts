@@ -1,23 +1,17 @@
 import fs from 'fs';
 import path from 'path';
-import Robot from '@/database/models/robots/Robot.js';
-import RobotType from '@/database/models/robots/RobotType.js';
+import { Robot, RobotType } from '@/database/models/robots/index.js';
 import { NotFoundError, ValidationError } from '@/utils/base.error.js';
 import {
   CreateRobotInput,
   CreateRobotWithImageInput,
   UpdateRobotInput,
   UpdateRobotWithImageInput,
-  RobotServiceResponse,
   IRobot,
 } from '@/types/robot.js';
 
 class RobotService {
   async createRobot(data: CreateRobotInput): Promise<IRobot> {
-    const robotType = await RobotType.findByPk(data.typeId);
-    if (!robotType) {
-      throw new NotFoundError('Robot type not found');
-    }
     const robot = await Robot.create(data);
     return robot.toJSON() as IRobot;
   }
@@ -26,15 +20,6 @@ class RobotService {
     if (!data.tempFilePath || !fs.existsSync(data.tempFilePath)) {
       throw new ValidationError('Temporary file not found');
     }
-
-    const robotType = await RobotType.findByPk(data.typeId);
-    if (!robotType) {
-      if (fs.existsSync(data.tempFilePath)) {
-        fs.unlinkSync(data.tempFilePath);
-      }
-      throw new NotFoundError('Robot type not found');
-    }
-
     let tempFolderPath: string | null = null;
 
     try {
@@ -96,10 +81,6 @@ class RobotService {
   }
 
   async getRobotById(id: string): Promise<IRobot> {
-    if (!id || typeof id !== 'string') {
-      throw new ValidationError('Valid robot ID is required');
-    }
-
     const robot = await Robot.findByPk(id, {
       include: [
         {
@@ -113,28 +94,6 @@ class RobotService {
     if (!robot) {
       throw new NotFoundError('Robot not found');
     }
-
-    return robot.toJSON() as IRobot;
-  }
-
-  async updateRobot(id: string, data: UpdateRobotInput): Promise<IRobot> {
-    if (!id || typeof id !== 'string') {
-      throw new ValidationError('Valid robot ID is required');
-    }
-
-    const robot = await Robot.findByPk(id);
-    if (!robot) {
-      throw new NotFoundError('Robot not found');
-    }
-
-    if (data.typeId) {
-      const robotType = await RobotType.findByPk(data.typeId);
-      if (!robotType) {
-        throw new NotFoundError('Robot type not found');
-      }
-    }
-
-    await robot.update(data);
     return robot.toJSON() as IRobot;
   }
 
@@ -142,15 +101,7 @@ class RobotService {
     id: string,
     data: UpdateRobotWithImageInput,
   ): Promise<IRobot> {
-    if (!id || typeof id !== 'string') {
-      throw new ValidationError('Valid robot ID is required');
-    }
-
     const robot = await Robot.findByPk(id);
-    if (!robot) {
-      throw new NotFoundError('Robot not found');
-    }
-
     const updateData: UpdateRobotInput = {
       name: data.name,
       typeId: data.typeId,
@@ -163,11 +114,11 @@ class RobotService {
           throw new ValidationError('New image file not found');
         }
 
-        if (robot.imagePath && fs.existsSync(robot.imagePath)) {
+        if (robot?.imagePath && fs.existsSync(robot.imagePath)) {
           fs.unlinkSync(robot.imagePath);
         }
 
-        const folderPath = `./uploads/robots/${robot.id}`;
+        const folderPath = `./uploads/robots/${robot?.id}`;
         if (!fs.existsSync(folderPath)) {
           fs.mkdirSync(folderPath, { recursive: true });
         }
@@ -177,9 +128,8 @@ class RobotService {
         fs.renameSync(data.newFilePath, finalPath);
         updateData.imagePath = finalPath;
       }
-
-      await robot.update(updateData);
-      return robot.toJSON() as IRobot;
+      await robot?.update(updateData);
+      return robot?.toJSON() as IRobot;
     } catch (error) {
       if (data.newFilePath && fs.existsSync(data.newFilePath)) {
         fs.unlinkSync(data.newFilePath);
@@ -188,25 +138,16 @@ class RobotService {
     }
   }
 
-  async deleteRobot(id: string): Promise<RobotServiceResponse> {
-    if (!id || typeof id !== 'string') {
-      throw new ValidationError('Valid robot ID is required');
-    }
-
+  async deleteRobot(id: string): Promise<void> {
     const robot = await Robot.findByPk(id);
-    if (!robot) {
-      throw new NotFoundError('Robot not found');
-    }
-
     try {
-      if (robot.imagePath && fs.existsSync(robot.imagePath)) {
+      if (robot?.imagePath && fs.existsSync(robot.imagePath)) {
         fs.unlinkSync(robot.imagePath);
 
         const folderPath = path.dirname(robot.imagePath);
         fs.rmdirSync(folderPath);
       }
-      await robot.destroy();
-      return { message: 'Robot deleted successfully' };
+      await robot?.destroy();
     } catch (error) {
       console.error('Error deleting robot:', error);
       throw error;

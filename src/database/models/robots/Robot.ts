@@ -17,7 +17,7 @@ interface RobotModel
   name: string;
   imagePath: string;
   typeId: ForeignKey<number>;
-  description: string | null;
+  description: CreationOptional<string | null>;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
 }
@@ -33,7 +33,7 @@ class Robot
   declare name: string;
   declare imagePath: string;
   declare typeId: ForeignKey<number>;
-  declare description: string | null;
+  declare description: CreationOptional<string | null>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
@@ -50,7 +50,7 @@ Robot.init(
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [1, 255],
+        len: [5, 50],
       },
     },
     imagePath: {
