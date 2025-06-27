@@ -2,6 +2,15 @@ name: Deploy to Ubuntu VPS
 
 on:
   workflow_call:
+    secrets:
+      VPS_HOST:
+        required: true
+      VPS_USERNAME:
+        required: true
+      VPS_SSH_KEY:
+        required: true
+      APP_PATH:
+        required: true
 
 jobs:
   deploy:
