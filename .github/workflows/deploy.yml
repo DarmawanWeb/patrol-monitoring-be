@@ -1,4 +1,4 @@
-name: Deploy to Ubuntu Server
+name: Deploy to Ubuntu VPS
 
 on:
   push:
@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout source code
         uses: actions/checkout@v2
 
       - name: Deploy via SSH
@@ -19,37 +19,37 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            echo "➡️ Masuk ke direktori aplikasi"
-            cd ${{ secrets.APP_PATH }}
+            bash -l -c '
+              set -e
 
-            echo "🔄 Menarik perubahan terbaru dari Git"
-            git pull origin main
+              echo "🔧 Loading environment (nvm, pnpm, etc.)..."
+              export NVM_DIR="$HOME/.nvm"
+              [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-            echo "📦 Memastikan .bashrc dijalankan untuk akses node, pnpm, dan pm2"
-            if [ -f ~/.bashrc ]; then
-              source ~/.bashrc
-            fi
+              export PNPM_HOME="$HOME/.local/share/pnpm"
+              export PATH="$PNPM_HOME:$PATH"
 
-            echo "📍 Menyeting PATH untuk pnpm jika diperlukan"
-            export PNPM_HOME="$HOME/.local/share/pnpm"
-            export PATH="$PNPM_HOME:$PATH:$PATH"
+              echo "📂 Entering app directory"
+              cd ${{ secrets.APP_PATH }}
 
-            echo "📥 Menginstall dependensi"
-            pnpm install
+              echo "🔄 Pulling latest code"
+              git pull origin main
 
-            echo "🏗️ Membuild project"
-            pnpm build
+              echo "📦 Installing dependencies"
+              pnpm install
 
-            echo "📄 Menyalin file .env ke dalam dist/"
-            cp .env dist/.env
+              echo "🔨 Building project"
+              pnpm build
 
-            echo "🚦 Menjalankan atau me-restart aplikasi menggunakan PM2"
-            pm2 describe patrol-be > /dev/null
+              echo "📁 Copying .env to dist/"
+              cp .env dist/.env
 
-            if [ $? -eq 0 ]; then
-              echo "🔁 Restarting existing PM2 process..."
-              pm2 restart patrol-be --update-env
-            else
-              echo "🚀 Starting new PM2 process with pnpm start"
-              pm2 start pnpm --name "patrol-be" -- start
-            fi
+              echo "🚀 Running or restarting app with PM2"
+              if pm2 describe patrol-be > /dev/null; then
+                pm2 restart patrol-be --update-env
+              else
+                pm2 start pnpm --name "patrol-be" -- start
+              fi
+
+              pm2 save
+            '
