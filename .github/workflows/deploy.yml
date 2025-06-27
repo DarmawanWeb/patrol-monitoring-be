@@ -1,16 +1,14 @@
 name: Deploy to Ubuntu VPS
 
 on:
-  push:
-    branches: [main]
+  workflow_call:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
@@ -22,29 +20,16 @@ jobs:
             bash -l -c '
               set -e
 
-              echo "🔧 Loading environment (nvm, pnpm, etc.)..."
-              export NVM_DIR="$HOME/.nvm"
-              [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-
               export PNPM_HOME="$HOME/.local/share/pnpm"
               export PATH="$PNPM_HOME:$PATH"
 
-              echo "📂 Entering app directory"
               cd ${{ secrets.APP_PATH }}
 
-              echo "🔄 Pulling latest code"
               git pull origin main
-
-              echo "📦 Installing dependencies"
               pnpm install
-
-              echo "🔨 Building project"
               pnpm build
-
-              echo "📁 Copying .env to dist/"
               cp .env dist/.env
 
-              echo "🚀 Running or restarting app with PM2"
               if pm2 describe patrol-be > /dev/null; then
                 pm2 restart patrol-be --update-env
               else
