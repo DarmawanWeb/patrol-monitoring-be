@@ -1,9 +1,9 @@
 import express, { Router } from 'express';
 
 import { authMiddleware } from '@/middleware/auth.middleware.js';
-import { uuidParamValidator } from '@/validators/general.validators';
+import { uuidParamValidator } from '@/validators/general.validators.js';
 import { validationMiddleware } from '@/middleware/validation.middleware.js';
-import { robotWebsocketQueryValidators } from '@/validators/robots/robot-websocket.validator';
+import { robotWebsocketQueryValidators } from '@/validators/robots/robot-websocket.validator.js';
 
 import {
   getAllRobotRoutesController,

@@ -1,4 +1,4 @@
-import logger from '@/config/logger';
+import logger from '@/config/logger.js';
 import { Robot, RobotWebsocket } from '@/database/models/robots/index.js';
 import { NotFoundError } from '@/utils/base.error.js';
 import type {
@@ -6,7 +6,7 @@ import type {
   RobotRouteData,
   RoutePoint,
   RobotWithWebsockets,
-} from '@/types/robot-websocket';
+} from '@/types/robot-websocket.js';
 import { Op } from 'sequelize';
 import {
   calculateDuration,

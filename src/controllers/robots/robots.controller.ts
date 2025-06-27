@@ -1,5 +1,5 @@
 import fs from 'fs';
-import logger from '@/config/logger';
+import logger from '@/config/logger.js';
 import type { Request, Response } from 'express';
 import createUpload from '@/utils/file.upload.js';
 import { handleError } from '@/utils/error.handler.js';

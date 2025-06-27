@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { Role } from '@/enums/role.enum.js';
-import { User, RefreshToken } from '@/database/models/users';
+import { User, RefreshToken } from '@/database/models/users/index.js';
 import {
   generateAccessToken,
   generateRefreshToken,

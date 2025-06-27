@@ -3,7 +3,7 @@ import { syncDatabase } from '@config/database.js';
 import logger from '@config/logger.js';
 import { env } from '@config/env.js';
 import { findAvailablePort } from '@utils/port.js';
-import socketServer from '@/config/ws';
+import socketServer from '@/config/ws.js';
 
 const startServer = async (): Promise<void> => {
   try {

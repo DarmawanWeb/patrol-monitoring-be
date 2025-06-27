@@ -10,7 +10,7 @@ import {
   getRobotByIdController,
   updateRobotController,
 } from '@/controllers/robots/robots.controller.js';
-import { uuidParamValidator } from '@/validators/general.validators';
+import { uuidParamValidator } from '@/validators/general.validators.js';
 
 const router: Router = express.Router();
 

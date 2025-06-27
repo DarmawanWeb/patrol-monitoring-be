@@ -10,7 +10,7 @@ import {
   deleteRobotTypeController,
 } from '@/controllers/robots/robot-types.controller.js';
 
-import { idParamValidator } from '@/validators/general.validators';
+import { idParamValidator } from '@/validators/general.validators.js';
 import { robotTypeValidators } from '@/validators/robots/robot-type.validator.js';
 
 const router: Router = express.Router();
