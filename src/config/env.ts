@@ -26,7 +26,7 @@ interface EnvConfig {
     secret: string;
     expiration: string;
   };
-  wensocketPort?: number;
+  websocketPort: number;
 }
 
 const getEnvConfig = (): EnvConfig => {
@@ -53,6 +53,7 @@ const getEnvConfig = (): EnvConfig => {
       secret: process.env.REFRESH_TOKEN_SECRET || 'default-refresh-secret',
       expiration: process.env.REFRESH_TOKEN_EXPIRATION || '30d',
     },
+    websocketPort: parseInt(process.env.WEBSOCKET_PORT || '8082', 10),
   };
 };
 

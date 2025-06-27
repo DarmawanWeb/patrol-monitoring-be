@@ -7,32 +7,30 @@ import socketServer from '@/config/ws';
 
 const startServer = async (): Promise<void> => {
   try {
-    // Initialize database
     logger.info('🔄 Initializing database...');
     await syncDatabase();
-    logger.info('✅ Database connected successfully');
 
-    // Create Express app
+    logger.info('✅ Database connected successfully');
     const app = createApp();
 
-    socketServer.listen(8082, () => {
-      logger.info(`Socket.IO server is running on ws://localhost:${8082}`);
+    const availableWsPort = await findAvailablePort(env.websocketPort);
+    socketServer.listen(availableWsPort, () => {
+      logger.info(
+        `Socket.IO server is running on ws://localhost:${availableWsPort}`,
+      );
     });
-    // Find available port
-    const availablePort = await findAvailablePort(env.app.port);
 
+    const availablePort = await findAvailablePort(env.app.port);
     if (availablePort !== env.app.port) {
       logger.warn(`Port ${env.app.port} busy, using port ${availablePort}`);
     }
 
-    // Start server
     const server = app.listen(availablePort, () => {
       logger.info(`🚀 Server running on port ${availablePort}`);
       logger.info(`📊 Health: http://localhost:${availablePort}/api/v1/health`);
       logger.info(`🌍 Environment: ${env.app.env}`);
     });
 
-    // Graceful shutdown
     const gracefulShutdown = (signal: string) => {
       logger.info(`Received ${signal}, shutting down...`);
       server.close(() => {

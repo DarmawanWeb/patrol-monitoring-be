@@ -12,12 +12,11 @@ const logger = pino({
         colorize: true,
         translateTime: 'SYS:standard',
         ignore: 'pid,hostname',
-        messageFormat: '{msg}',
       },
     },
   }),
   formatters: {
-    level: (label) => {
+    level: (label: string) => {
       return { level: label };
     },
   },
