@@ -6,8 +6,5 @@ export const idParamValidator: ValidationChain[] = [
 ];
 
 export const uuidParamValidator = [
-  param('id')
-    .isUUID()
-    .withMessage('Valid UUID is required')
-    .customSanitizer((value) => value.toLowerCase()),
+  param('id').isUUID().withMessage('Valid UUID is required'),
 ];
