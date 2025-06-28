@@ -55,7 +55,7 @@ export default class AuthService {
     refreshToken: string;
     user: UserResponse;
   }> => {
-    const { name, email, password } = userData;
+    const { name, email, password, role = Role.GUEST } = userData;
 
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
@@ -63,12 +63,11 @@ export default class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userRole = Role.GUEST;
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
-      role: userRole,
+      role,
       active: true,
     });
 

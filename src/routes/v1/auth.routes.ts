@@ -7,6 +7,7 @@ import {
 } from '@/validators/auth.validators.js';
 import {
   registerController,
+  registerWithRoleController,
   loginController,
   refreshController,
   logoutController,
@@ -16,6 +17,12 @@ import {
 const router: Router = express.Router();
 
 router.post('/register', registerValidators, registerController);
+router.post(
+  '/create-user',
+  registerValidators,
+  authMiddleware,
+  registerWithRoleController,
+);
 router.post('/login', loginValidators, loginController);
 router.post('/refresh', refreshController);
 router.post('/logout', authMiddleware, logoutController);

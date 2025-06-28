@@ -33,6 +33,38 @@ export const registerController = async (
   }
 };
 
+export const registerWithRoleController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(422).json({
+        message: 'Validation error',
+        errors: errors.array(),
+        success: false,
+      });
+      return;
+    }
+    const { name, email, password, role } = req.body;
+    const result = await authService.registerUser({
+      name,
+      email,
+      password,
+      role,
+    });
+
+    res.status(200).json({
+      message: 'User registered successfully with role',
+      data: result,
+      success: true,
+    });
+  } catch (error: unknown) {
+    handleError(error, res);
+  }
+};
+
 export const loginController = async (
   req: Request,
   res: Response,

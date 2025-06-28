@@ -1,9 +1,11 @@
 import { Request } from 'express';
+import { Role } from '@/enums/role.enum';
 
 export interface RegisterUserData {
   name: string;
   email: string;
   password: string;
+  role?: Role;
 }
 
 export interface AuthTokens {
