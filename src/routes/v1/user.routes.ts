@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { authMiddleware } from '@/middleware/auth.middleware';
+import { authMiddleware } from '@/middleware/auth.middleware.js';
 import {
   getAllUsersController,
   updateUserController,
   deleteUserController,
-} from '@/controllers/user.controller';
+} from '@/controllers/user.controller.js';
 
 const router: Router = Router();
 router.use(authMiddleware);

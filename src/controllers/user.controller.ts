@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
-import { handleError } from '@/utils/error.handler';
-import UserService from '@/services/user.service';
+import { handleError } from '@/utils/error.handler.js';
+import UserService from '@/services/user.service.js';
 
 const userService = new UserService();
 

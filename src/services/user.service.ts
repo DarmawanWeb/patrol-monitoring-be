@@ -1,5 +1,5 @@
-import { User, RefreshToken } from '@/database/models/users';
-import { NotFoundError } from '@/utils/base.error';
+import { User, RefreshToken } from '@/database/models/users/index.js';
+import { NotFoundError } from '@/utils/base.error.js';
 import type { IUser, UserUpdateInput } from '@/types/user';
 
 class UserService {
