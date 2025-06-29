@@ -1,3 +1,4 @@
+import { fn, col } from 'sequelize';
 import { RobotType, Robot } from '@/database/models/robots/index.js';
 import { NotFoundError, ValidationError } from '@/utils/base.error.js';
 import type { IRobotType, RobotTypeInput } from '@/types/robot-type.js';
@@ -29,19 +30,31 @@ class RobotTypeService {
   }
 
   async getAllRobotTypes(): Promise<IRobotType[]> {
-    const robotTypes = await RobotType.findAll({
+    const robotTypes: RobotType[] = await RobotType.findAll({
+      attributes: {
+        include: [[fn('COUNT', col('robots.id')), 'robotCount']],
+      },
       include: [
         {
           model: Robot,
           as: 'robots',
-          attributes: ['id', 'name'],
+          attributes: [],
           required: false,
         },
       ],
+      group: ['RobotType.id'],
       order: [['createdAt', 'DESC']],
     });
 
-    return robotTypes.map((type) => type.toJSON() as IRobotType);
+    return robotTypes.map((type) => {
+      const json = type.toJSON() as IRobotType & { robotCount: number };
+      json.robotCount = Number(
+        (
+          type as RobotType & { getDataValue: (key: string) => unknown }
+        ).getDataValue('robotCount') ?? 0,
+      );
+      return json;
+    });
   }
 
   async updateRobotType(id: number, data: RobotTypeInput): Promise<IRobotType> {

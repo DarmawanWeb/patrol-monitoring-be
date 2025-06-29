@@ -71,14 +71,23 @@ export const createRobotController = async (
 };
 
 export const getAllRobotsController = async (
-  _req: Request,
+  req: Request,
   res: Response,
 ): Promise<void> => {
   try {
-    const robots = await robotService.getAllRobots();
+    const { page = 1, limit = 50 } = req.query;
+
+    const paginationOptions = {
+      page: parseInt(page as string, 10),
+      limit: parseInt(limit as string, 10),
+    };
+
+    const result = await robotService.getAllRobots(paginationOptions);
+
     res.status(200).json({
       message: 'Robots retrieved successfully',
-      data: robots,
+      data: result.data,
+      meta: result.meta,
       success: true,
     });
   } catch (error) {

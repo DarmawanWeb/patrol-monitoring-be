@@ -1,15 +1,14 @@
 import express from 'express';
 import { setupMiddleware, setupErrorHandlers } from '@middleware/index.js';
 import { Request, Response } from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import v1Routes from '@/routes/index.js';
+import {
+  uploadStatic,
+  uploadHeadersMiddleware,
+} from '@/middleware/upload.middleware.js';
 
 const createApp = (): express.Application => {
   const app = express();
-
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
 
   setupMiddleware(app);
 
@@ -23,9 +22,7 @@ const createApp = (): express.Application => {
       version: '1.0.0',
     });
   });
-
-  const uploadPath = path.join(__dirname, '../uploads');
-  app.use('/uploads', express.static(uploadPath));
+  app.use('/uploads', uploadHeadersMiddleware, uploadStatic);
 
   setupErrorHandlers(app);
   return app;

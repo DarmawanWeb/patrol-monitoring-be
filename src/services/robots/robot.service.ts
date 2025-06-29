@@ -1,6 +1,13 @@
 import fs from 'fs';
 import path from 'path';
-import { Robot, RobotType } from '@/database/models/robots/index.js';
+import {
+  Robot,
+  RobotType,
+  RobotWebsocket,
+} from '@/database/models/robots/index.js';
+
+import { PaginatedResult } from '@/types/general.js';
+
 import { NotFoundError, ValidationError } from '@/utils/base.error.js';
 import {
   CreateRobotInput,
@@ -65,19 +72,51 @@ class RobotService {
     }
   }
 
-  async getAllRobots(): Promise<IRobot[]> {
-    const robots = await Robot.findAll({
+  async getAllRobots(options: {
+    page: number;
+    limit: number;
+  }): Promise<PaginatedResult<Robot>> {
+    const { page = 1, limit = 50 } = options;
+    const offset = (page - 1) * limit;
+
+    const { count, rows } = await Robot.findAndCountAll({
       include: [
         {
           model: RobotType,
           as: 'type',
           attributes: ['id', 'name'],
         },
+        {
+          model: RobotWebsocket,
+          as: 'websockets',
+          attributes: [
+            'batteryLevel',
+            'locationX',
+            'locationY',
+            'status',
+            'timeStamp',
+          ],
+          limit: 1,
+          order: [['timeStamp', 'DESC']],
+        },
       ],
+      limit,
+      offset,
       order: [['createdAt', 'DESC']],
+      distinct: true,
     });
 
-    return robots.map((robot) => robot.toJSON() as IRobot);
+    const totalPages = Math.ceil(count / limit);
+
+    return {
+      data: rows,
+      meta: {
+        total: count,
+        page,
+        limit,
+        totalPages,
+      },
+    };
   }
 
   async getRobotById(id: string): Promise<IRobot> {
