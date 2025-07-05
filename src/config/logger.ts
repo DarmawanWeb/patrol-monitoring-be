@@ -1,5 +1,5 @@
-import pino, { Logger } from 'pino';
 import { env } from '@config/env.js';
+import pino, { type Logger } from 'pino';
 
 const isDevelopment = env.app.env === 'development';
 

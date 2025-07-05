@@ -1,9 +1,9 @@
-import fs from 'fs';
-import logger from '@/config/logger.js';
+import fs from 'node:fs';
 import type { Request, Response } from 'express';
-import createUpload from '@/utils/file.upload.js';
-import { handleError } from '@/utils/error.handler.js';
+import logger from '@/config/logger.js';
 import RobotService from '@/services/robots/robot.service.js';
+import { handleError } from '@/utils/error.handler.js';
+import createUpload from '@/utils/file.upload.js';
 
 const robotService = new RobotService();
 const tempUpload = createUpload('./uploads/temp', [

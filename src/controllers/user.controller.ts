@@ -1,11 +1,11 @@
 import type { Request, Response } from 'express';
-import { handleError } from '@/utils/error.handler.js';
 import UserService from '@/services/user.service.js';
+import { handleError } from '@/utils/error.handler.js';
 
 const userService = new UserService();
 
 export const getAllUsersController = async (
-  req: Request,
+  _req: Request,
   res: Response,
 ): Promise<void> => {
   try {

@@ -1,5 +1,4 @@
-import { param } from 'express-validator';
-import { ValidationChain } from 'express-validator';
+import { param, type ValidationChain } from 'express-validator';
 
 export const idParamValidator: ValidationChain[] = [
   param('id').isInt({ min: 1 }).withMessage('Valid ID is required'),

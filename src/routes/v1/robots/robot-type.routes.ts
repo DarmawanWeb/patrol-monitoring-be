@@ -1,14 +1,13 @@
-import express, { Router } from 'express';
-import { authMiddleware } from '@/middleware/auth.middleware.js';
-import { validationMiddleware } from '@/middleware/validation.middleware.js';
-
+import express, { type Router } from 'express';
 import {
   createRobotTypeController,
+  deleteRobotTypeController,
   getAllRobotTypesController,
   getRobotTypeByIdController,
   updateRobotTypeController,
-  deleteRobotTypeController,
 } from '@/controllers/robots/robot-types.controller.js';
+import { authMiddleware } from '@/middleware/auth.middleware.js';
+import { validationMiddleware } from '@/middleware/validation.middleware.js';
 
 import { idParamValidator } from '@/validators/general.validators.js';
 import { robotTypeValidators } from '@/validators/robots/robot-type.validator.js';

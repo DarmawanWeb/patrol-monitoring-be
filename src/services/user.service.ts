@@ -1,6 +1,6 @@
-import { User, RefreshToken } from '@/database/models/users/index.js';
-import { NotFoundError } from '@/utils/base.error.js';
+import { RefreshToken, User } from '@/database/models/users/index.js';
 import type { IUser, UserUpdateInput } from '@/types/user';
+import { NotFoundError } from '@/utils/base.error.js';
 
 class UserService {
   async getAllUsers(): Promise<IUser[]> {

@@ -1,9 +1,9 @@
-import { Router, Request, Response } from 'express';
 import { env } from '@config/env.js';
+import { type Request, type Response, Router } from 'express';
 
 const router: Router = Router();
 
-router.get('/', (req: Request, res: Response) => {
+router.get('/', (_req: Request, res: Response) => {
   res.status(200).json({
     status: 'OK',
     timestamp: new Date().toISOString(),

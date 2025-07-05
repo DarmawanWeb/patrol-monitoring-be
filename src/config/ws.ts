@@ -1,8 +1,8 @@
-import http from 'http';
-import logger from './logger.js';
+import http from 'node:http';
+import { env } from 'node:process';
 import { Server } from 'socket.io';
-import { env } from 'process';
 import robotWebsocketService from '@/services/robots/robot-websocket.service.js';
+import logger from './logger.js';
 
 const socketServer = http.createServer();
 const robotWs = new robotWebsocketService();

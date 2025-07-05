@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import logger from '@config/logger.js';
 import { env } from '@config/env.js';
+import logger from '@config/logger.js';
+import type { Request, Response } from 'express';
 
 interface ErrorWithStatus extends Error {
   status?: number;

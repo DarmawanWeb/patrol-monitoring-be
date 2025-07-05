@@ -1,5 +1,5 @@
-import { Request } from 'express';
-import { Role } from '@/enums/role.enum';
+import type { Request } from 'express';
+import type { Role } from '@/enums/role.enum';
 
 export interface RegisterUserData {
   name: string;

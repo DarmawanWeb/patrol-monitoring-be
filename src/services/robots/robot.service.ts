@@ -1,21 +1,20 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import {
   Robot,
   RobotType,
   RobotWebsocket,
 } from '@/database/models/robots/index.js';
 
-import { PaginatedResult } from '@/types/general.js';
-
-import { NotFoundError, ValidationError } from '@/utils/base.error.js';
-import {
+import type { PaginatedResult } from '@/types/general.js';
+import type {
   CreateRobotInput,
   CreateRobotWithImageInput,
+  IRobot,
   UpdateRobotInput,
   UpdateRobotWithImageInput,
-  IRobot,
 } from '@/types/robot.js';
+import { NotFoundError, ValidationError } from '@/utils/base.error.js';
 
 class RobotService {
   async createRobot(data: CreateRobotInput): Promise<IRobot> {
@@ -55,17 +54,13 @@ class RobotService {
       if (fs.existsSync(data.tempFilePath)) {
         try {
           fs.unlinkSync(data.tempFilePath);
-        } catch (cleanupError) {
-          console.error('Error cleaning up temp file:', cleanupError);
-        }
+        } catch (cleanupError) {}
       }
 
       if (tempFolderPath && fs.existsSync(tempFolderPath)) {
         try {
           fs.rmSync(tempFolderPath, { recursive: true, force: true });
-        } catch (cleanupError) {
-          console.error('Error cleaning up temp folder:', cleanupError);
-        }
+        } catch (cleanupError) {}
       }
 
       throw error;
@@ -179,18 +174,13 @@ class RobotService {
 
   async deleteRobot(id: string): Promise<void> {
     const robot = await Robot.findByPk(id);
-    try {
-      if (robot?.imagePath && fs.existsSync(robot.imagePath)) {
-        fs.unlinkSync(robot.imagePath);
+    if (robot?.imagePath && fs.existsSync(robot.imagePath)) {
+      fs.unlinkSync(robot.imagePath);
 
-        const folderPath = path.dirname(robot.imagePath);
-        fs.rmdirSync(folderPath);
-      }
-      await robot?.destroy();
-    } catch (error) {
-      console.error('Error deleting robot:', error);
-      throw error;
+      const folderPath = path.dirname(robot.imagePath);
+      fs.rmdirSync(folderPath);
     }
+    await robot?.destroy();
   }
 }
 

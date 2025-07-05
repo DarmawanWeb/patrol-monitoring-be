@@ -1,13 +1,13 @@
+import { Op } from 'sequelize';
 import logger from '@/config/logger.js';
 import { Robot, RobotWebsocket } from '@/database/models/robots/index.js';
-import { NotFoundError } from '@/utils/base.error.js';
 import type {
-  WebSocketRobotData,
   RobotRouteData,
-  RoutePoint,
   RobotWithWebsockets,
+  RoutePoint,
+  WebSocketRobotData,
 } from '@/types/robot-websocket.js';
-import { Op } from 'sequelize';
+import { NotFoundError } from '@/utils/base.error.js';
 import {
   calculateDuration,
   calculateTotalDistance,

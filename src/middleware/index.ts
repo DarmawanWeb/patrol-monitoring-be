@@ -1,9 +1,9 @@
-import express from 'express';
 import { corsConfig } from '@config/cors.js';
-import { securityConfig } from '@/config/security.js';
-import { morganConfig } from '@/config/morgan.js';
-import { errorHandler } from '@/middleware/error.middleware.js';
 import { notFoundHandler } from '@middleware/not-found.middleware.js';
+import express from 'express';
+import { morganConfig } from '@/config/morgan.js';
+import { securityConfig } from '@/config/security.js';
+import { errorHandler } from '@/middleware/error.middleware.js';
 
 export const setupMiddleware = (app: express.Application) => {
   app.use(securityConfig.helmet);

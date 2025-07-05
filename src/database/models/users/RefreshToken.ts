@@ -1,5 +1,5 @@
-import { Model, DataTypes } from 'sequelize';
 import sequelize from '@config/database.js';
+import { DataTypes, Model } from 'sequelize';
 
 class RefreshToken extends Model {}
 

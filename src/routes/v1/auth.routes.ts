@@ -1,18 +1,17 @@
-import express from 'express';
-import { type Router } from 'express';
-import { authMiddleware } from '@/middleware/auth.middleware.js';
+import express, { type Router } from 'express';
 import {
-  registerValidators,
-  loginValidators,
-} from '@/validators/auth.validators.js';
-import {
+  loginController,
+  logoutController,
+  refreshController,
   registerController,
   registerWithRoleController,
-  loginController,
-  refreshController,
-  logoutController,
   userController,
 } from '@/controllers/auth.controller.js';
+import { authMiddleware } from '@/middleware/auth.middleware.js';
+import {
+  loginValidators,
+  registerValidators,
+} from '@/validators/auth.validators.js';
 
 const router: Router = express.Router();
 

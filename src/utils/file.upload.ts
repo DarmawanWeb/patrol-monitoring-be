@@ -1,17 +1,17 @@
-import multer, { StorageEngine, FileFilterCallback } from 'multer';
-import path from 'path';
-import fs from 'fs';
+import fs from 'node:fs';
+import path from 'node:path';
+import multer, { type FileFilterCallback, type StorageEngine } from 'multer';
 
 const storage = (uploadPath: string): StorageEngine => {
   return multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (_req, _file, cb) => {
       if (!fs.existsSync(uploadPath)) {
         fs.mkdirSync(uploadPath, { recursive: true });
       }
       cb(null, uploadPath);
     },
-    filename: (req, file, cb) => {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    filename: (_req, file, cb) => {
+      const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
       cb(null, uniqueSuffix + path.extname(file.originalname));
     },
   });
@@ -19,7 +19,7 @@ const storage = (uploadPath: string): StorageEngine => {
 
 const createUpload = (uploadPath: string, allowedTypes: string[]) => {
   const fileFilter = (
-    req: Express.Request,
+    _req: Express.Request,
     file: Express.Multer.File,
     cb: FileFilterCallback,
   ) => {

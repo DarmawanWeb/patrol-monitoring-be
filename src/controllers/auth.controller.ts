@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express';
-import { handleError } from '@/utils/error.handler.js';
 import { validationResult } from 'express-validator';
 import AuthService from '@/services/auth.service.js';
-import { AuthRequest } from '@/types/auth.js';
+import type { AuthRequest } from '@/types/auth.js';
+import { handleError } from '@/utils/error.handler.js';
 
 const authService = new AuthService();
 

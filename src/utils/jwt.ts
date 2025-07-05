@@ -1,5 +1,5 @@
-import jwt, { SignOptions } from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import jwt, { type SignOptions } from 'jsonwebtoken';
 
 dotenv.config();
 

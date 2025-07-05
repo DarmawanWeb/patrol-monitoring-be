@@ -12,7 +12,10 @@ export function parseRoutesQuery(q: Record<string, unknown>): RoutesQuery {
 
   const limit = q.limit ? parseInt(String(q.limit), 10) : undefined;
   return {
-    limit: Number.isFinite(limit) && limit! > 0 ? limit : undefined,
+    limit:
+      limit !== undefined && Number.isFinite(limit) && limit > 0
+        ? limit
+        : undefined,
     startDate: toDate(q.startDate),
     endDate: toDate(q.endDate),
   };

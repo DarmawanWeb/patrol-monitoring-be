@@ -1,11 +1,10 @@
-import express from 'express';
-import { setupMiddleware, setupErrorHandlers } from '@middleware/index.js';
-import { Request, Response } from 'express';
-import v1Routes from '@/routes/index.js';
+import { setupErrorHandlers, setupMiddleware } from '@middleware/index.js';
+import express, { type Request, type Response } from 'express';
 import {
-  uploadStatic,
   uploadHeadersMiddleware,
+  uploadStatic,
 } from '@/middleware/upload.middleware.js';
+import v1Routes from '@/routes/index.js';
 
 const createApp = (): express.Application => {
   const app = express();
@@ -14,7 +13,7 @@ const createApp = (): express.Application => {
 
   app.use('/api', v1Routes);
 
-  app.get('/', (req: Request, res: Response) => {
+  app.get('/', (_req: Request, res: Response) => {
     res.status(200).json({
       message: 'Welcome to the Patrol BE API',
       timestamp: new Date().toISOString(),

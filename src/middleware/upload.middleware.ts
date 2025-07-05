@@ -1,8 +1,12 @@
-import express, { Handler, Request, Response, NextFunction } from 'express';
-
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { env } from '@config/env.js';
+import express, {
+  type Handler,
+  type NextFunction,
+  type Request,
+  type Response,
+} from 'express';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

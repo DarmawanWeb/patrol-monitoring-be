@@ -1,9 +1,9 @@
 import {
-  Model,
+  type CreationOptional,
   DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
-  CreationOptional,
+  type InferAttributes,
+  type InferCreationAttributes,
+  Model,
 } from 'sequelize';
 import sequelize from '@/config/database.js';
 

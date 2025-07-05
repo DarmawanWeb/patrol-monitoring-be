@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
-import { handleError } from '@/utils/error.handler.js';
 import RobotTypeService from '@/services/robots/robot-type.service.js';
+import { handleError } from '@/utils/error.handler.js';
 
 const service = new RobotTypeService();
 

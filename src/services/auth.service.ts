@@ -1,22 +1,22 @@
 import bcrypt from 'bcryptjs';
+import { RefreshToken, User } from '@/database/models/users/index.js';
 import { Role } from '@/enums/role.enum.js';
-import { User, RefreshToken } from '@/database/models/users/index.js';
-import {
-  generateAccessToken,
-  generateRefreshToken,
-  verifyRefreshToken,
-} from '@/utils/jwt.js';
+import type {
+  AuthTokens,
+  AuthUser,
+  RegisterUserData,
+  UserResponse,
+} from '@/types/auth.js';
 import {
   AuthenticationError,
   ConflictError,
   NotFoundError,
 } from '@/utils/base.error.js';
-import type {
-  AuthUser,
-  AuthTokens,
-  RegisterUserData,
-  UserResponse,
-} from '@/types/auth.js';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from '@/utils/jwt.js';
 
 export default class AuthService {
   private generateAndStoreTokens = async (

@@ -1,8 +1,4 @@
-import express, { Router } from 'express';
-
-import { authMiddleware } from '@/middleware/auth.middleware.js';
-import { validationMiddleware } from '@/middleware/validation.middleware.js';
-
+import express, { type Router } from 'express';
 import {
   createRobotController,
   deleteRobotController,
@@ -10,6 +6,8 @@ import {
   getRobotByIdController,
   updateRobotController,
 } from '@/controllers/robots/robots.controller.js';
+import { authMiddleware } from '@/middleware/auth.middleware.js';
+import { validationMiddleware } from '@/middleware/validation.middleware.js';
 import { uuidParamValidator } from '@/validators/general.validators.js';
 
 const router: Router = express.Router();

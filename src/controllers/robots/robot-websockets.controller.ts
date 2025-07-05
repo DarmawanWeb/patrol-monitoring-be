@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
-import { handleError } from '@/utils/error.handler.js';
 import RobotWebsocketService from '@/services/robots/robot-websocket.service.js';
+import { handleError } from '@/utils/error.handler.js';
 import { parseRoutesQuery } from '@/utils/query-parser.js';
 
 const robotWebsocketService = new RobotWebsocketService();
