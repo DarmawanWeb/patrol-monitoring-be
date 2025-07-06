@@ -14,7 +14,7 @@ interface PatrolRouteModel
   > {
   id: CreationOptional<number>;
   name: string;
-  description: string;
+  description: CreationOptional<string | null>;
   total_distance: number;
   estimated_duration: number;
   createdAt: CreationOptional<Date>;
@@ -30,7 +30,7 @@ class PatrolRoute
 {
   declare id: CreationOptional<number>;
   declare name: string;
-  declare description: string;
+  declare description: CreationOptional<string | null>;
   declare total_distance: number;
   declare estimated_duration: number;
   declare createdAt: CreationOptional<Date>;
@@ -47,10 +47,6 @@ PatrolRoute.init(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [5, 50],
-      },
     },
     description: {
       type: DataTypes.TEXT,

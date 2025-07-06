@@ -1,11 +1,13 @@
 import {
   type CreationOptional,
   DataTypes,
+  type ForeignKey,
   type InferAttributes,
   type InferCreationAttributes,
   Model,
 } from 'sequelize';
 import sequelize from '@/config/database.js';
+import { ResolutionStatus, SeverityLevel } from '@/enums/result.enum';
 
 interface OverheatDetectionModel
   extends Model<
@@ -14,19 +16,17 @@ interface OverheatDetectionModel
   > {
   id: CreationOptional<number>;
   name: string;
-  sessionId: number;
+  sessionId: ForeignKey<number>;
+  waypointId: ForeignKey<number>;
   temperature: number;
-  severityLevel: string;
+  severityLevel: SeverityLevel;
   thermalImagePath: string;
   rgbImagePath: string;
-  locationX: number;
-  locationY: number;
-  orientationZ: number;
   confidenceScore: number;
   isConfirmed: boolean;
   confirmedBy: CreationOptional<number>;
   confirmedAt: CreationOptional<Date>;
-  resolutionStatus: string;
+  resolutionStatus: ResolutionStatus;
   resolutionNotes: string;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
@@ -41,19 +41,17 @@ class OverheatDetection
 {
   declare id: CreationOptional<number>;
   declare name: string;
-  declare sessionId: number;
+  declare sessionId: ForeignKey<number>;
+  declare waypointId: ForeignKey<number>;
   declare temperature: number;
-  declare severityLevel: string;
+  declare severityLevel: SeverityLevel;
   declare thermalImagePath: string;
   declare rgbImagePath: string;
-  declare locationX: number;
-  declare locationY: number;
-  declare orientationZ: number;
   declare confidenceScore: number;
   declare isConfirmed: boolean;
   declare confirmedBy: CreationOptional<number>;
   declare confirmedAt: CreationOptional<Date>;
-  declare resolutionStatus: string;
+  declare resolutionStatus: ResolutionStatus;
   declare resolutionNotes: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
@@ -69,16 +67,20 @@ OverheatDetection.init(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [5, 50],
-      },
     },
     sessionId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'PatrolSession',
+        model: 'patrol_sessions',
+        key: 'id',
+      },
+    },
+    waypointId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'route_waypoints',
         key: 'id',
       },
     },
@@ -90,11 +92,13 @@ OverheatDetection.init(
       },
     },
     severityLevel: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(
+        SeverityLevel.LOW,
+        SeverityLevel.MEDIUM,
+        SeverityLevel.HIGH,
+      ),
       allowNull: false,
-      validate: {
-        isIn: [['low', 'medium', 'high']],
-      },
+      defaultValue: SeverityLevel.LOW,
     },
     thermalImagePath: {
       type: DataTypes.STRING,
@@ -104,29 +108,9 @@ OverheatDetection.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    locationX: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    locationY: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    orientationZ: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-      validate: {
-        min: -180,
-        max: 180,
-      },
-    },
     confidenceScore: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      validate: {
-        min: 0,
-        max: 1,
-      },
     },
     isConfirmed: {
       type: DataTypes.BOOLEAN,
@@ -137,7 +121,7 @@ OverheatDetection.init(
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: 'User',
+        model: 'users',
         key: 'id',
       },
     },
@@ -146,24 +130,25 @@ OverheatDetection.init(
       allowNull: true,
     },
     resolutionStatus: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(
+        ResolutionStatus.IN_PROGRESS,
+        ResolutionStatus.RESOLVED,
+        ResolutionStatus.UNRESOLVED,
+      ),
       allowNull: false,
-      validate: {
-        isIn: [['unresolved', 'resolved', 'in_progress']],
-      },
+      defaultValue: ResolutionStatus.UNRESOLVED,
     },
     resolutionNotes: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
-
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
   {
     sequelize,
     modelName: 'OverheatDetection',
-    tableName: 'patrol_routes',
+    tableName: 'overheat_detections',
     timestamps: true,
   },
 );

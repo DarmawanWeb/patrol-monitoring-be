@@ -1,11 +1,13 @@
 import {
   type CreationOptional,
   DataTypes,
+  type ForeignKey,
   type InferAttributes,
   type InferCreationAttributes,
   Model,
 } from 'sequelize';
 import sequelize from '@/config/database.js';
+import { ScheduleType } from '@/enums/schedule.enum';
 
 interface PatrolScheduleModel
   extends Model<
@@ -13,9 +15,9 @@ interface PatrolScheduleModel
     InferCreationAttributes<PatrolScheduleModel>
   > {
   id: CreationOptional<number>;
-  robotId: number;
-  routeId: number;
-  scheduleType: string;
+  robotId: ForeignKey<string>;
+  routeId: ForeignKey<number>;
+  scheduleType: ScheduleType;
   startTime: string;
   intervalMinutes: CreationOptional<number>;
   daysOfWeek: CreationOptional<number[]>;
@@ -32,9 +34,9 @@ class PatrolSchedule
   implements PatrolScheduleModel
 {
   declare id: CreationOptional<number>;
-  declare robotId: number;
-  declare routeId: number;
-  declare scheduleType: string;
+  declare robotId: ForeignKey<string>;
+  declare routeId: ForeignKey<number>;
+  declare scheduleType: ScheduleType;
   declare startTime: string;
   declare intervalMinutes: CreationOptional<number>;
   declare daysOfWeek: CreationOptional<number[]>;
@@ -53,13 +55,27 @@ PatrolSchedule.init(
     robotId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'robots',
+        key: 'id',
+      },
     },
     routeId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'patrol_routes',
+        key: 'id',
+      },
     },
     scheduleType: {
-      type: DataTypes.ENUM('once', 'daily', 'weekly', 'monthly'),
+      type: DataTypes.ENUM(
+        ScheduleType.ONCE,
+        ScheduleType.DAILY,
+        ScheduleType.WEEKLY,
+        ScheduleType.MONTHLY,
+      ),
+      defaultValue: ScheduleType.ONCE,
       allowNull: false,
     },
     startTime: {

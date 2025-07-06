@@ -3,33 +3,30 @@ import ComponentDetail from './ComponentDetail.js';
 import ComponentMaintenanceLog from './ComponentMaintenanceLog.js';
 import ComponentType from './ComponentType.js';
 
-Component.belongsTo(ComponentType, {
-  foreignKey: 'typeId',
-  as: 'type',
-});
-ComponentType.hasMany(Component, {
-  foreignKey: 'typeId',
-  as: 'components',
-});
+/* ComponentType 1 ── n Component */
+Component.belongsTo(ComponentType, { foreignKey: 'typeId', as: 'type' });
+ComponentType.hasMany(Component, { foreignKey: 'typeId', as: 'components' });
 
-ComponentDetail.belongsTo(Component, {
-  foreignKey: 'componentsId',
-  as: 'component',
-});
+/* Component 1 ── n ComponentDetail */
 Component.hasMany(ComponentDetail, {
-  foreignKey: 'componentsId',
+  foreignKey: 'componentId',
   as: 'details',
 });
-
-ComponentMaintenanceLog.belongsTo(ComponentDetail, {
-  foreignKey: 'componentSerialNumber',
-  targetKey: 'serialNumber',
-  as: 'componentDetail',
+ComponentDetail.belongsTo(Component, {
+  foreignKey: 'componentId',
+  as: 'component',
 });
+
+/* ComponentDetail 1 ── n ComponentMaintenanceLog */
 ComponentDetail.hasMany(ComponentMaintenanceLog, {
   foreignKey: 'componentSerialNumber',
   sourceKey: 'serialNumber',
   as: 'maintenanceLogs',
+});
+ComponentMaintenanceLog.belongsTo(ComponentDetail, {
+  foreignKey: 'componentSerialNumber',
+  targetKey: 'serialNumber',
+  as: 'componentDetail',
 });
 
 export { Component, ComponentType, ComponentDetail, ComponentMaintenanceLog };

@@ -81,7 +81,12 @@ ComponentDetail.init(
       allowNull: false,
     },
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(
+        ComponentStatus.ACTIVE,
+        ComponentStatus.INACTIVE,
+        ComponentStatus.MAINTENANCE,
+        ComponentStatus.FAULT,
+      ),
       allowNull: false,
       defaultValue: ComponentStatus.ACTIVE,
     },

@@ -1,22 +1,13 @@
 import {
   type CreationOptional,
   DataTypes,
+  type ForeignKey,
   type InferAttributes,
   type InferCreationAttributes,
   Model,
 } from 'sequelize';
 import sequelize from '@/config/database.js';
-
-// start_time TIMESTAMP WITH TIME ZONE NOT NULL,
-//     end_time TIMESTAMP WITH TIME ZONE,
-//     status VARCHAR(20) CHECK (status IN ('scheduled', 'in_progress', 'completed', 'cancelled', 'failed')) DEFAULT 'scheduled',
-//     total_distance DECIMAL(10,2),
-//     total_duration INTEGER, -- in minutes
-//     components_inspected INTEGER DEFAULT 0,
-//     anomalies_detected INTEGER DEFAULT 0,
-//     battery_start DECIMAL(5,2),
-//     battery_end DECIMAL(5,2),
-//     notes TEXT,
+import { PatrolStatus } from '@/enums/patrol.enum';
 
 interface PatrolSessionModel
   extends Model<
@@ -24,7 +15,7 @@ interface PatrolSessionModel
     InferCreationAttributes<PatrolSessionModel>
   > {
   id: CreationOptional<number>;
-  scheduleId: number;
+  scheduleId: ForeignKey<number>;
   startTime: string;
   endTime: string;
   totalDistance: number;
@@ -32,7 +23,7 @@ interface PatrolSessionModel
   anomaliesDetected: number;
   batteryStart: number;
   batteryEnd: number;
-  status: string;
+  status: PatrolStatus;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
 }
@@ -45,7 +36,7 @@ class PatrolSession
   implements PatrolSessionModel
 {
   declare id: CreationOptional<number>;
-  declare scheduleId: number;
+  declare scheduleId: ForeignKey<number>;
   declare startTime: string;
   declare endTime: string;
   declare totalDistance: number;
@@ -53,7 +44,7 @@ class PatrolSession
   declare anomaliesDetected: number;
   declare batteryStart: number;
   declare batteryEnd: number;
-  declare status: string;
+  declare status: PatrolStatus;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
@@ -68,6 +59,10 @@ PatrolSession.init(
     scheduleId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'patrol_schedules',
+        key: 'id',
+      },
     },
     startTime: {
       type: DataTypes.DATE,
@@ -103,9 +98,14 @@ PatrolSession.init(
       defaultValue: 100.0,
     },
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(
+        PatrolStatus.SCHEDULED,
+        PatrolStatus.IN_PROGRESS,
+        PatrolStatus.COMPLETED,
+        PatrolStatus.FAILED,
+      ),
       allowNull: false,
-      defaultValue: 'scheduled',
+      defaultValue: PatrolStatus.SCHEDULED,
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
@@ -113,7 +113,7 @@ PatrolSession.init(
   {
     sequelize,
     modelName: 'PatrolSession',
-    tableName: 'patrol_schedules',
+    tableName: 'patrol_sessions',
     timestamps: true,
     underscored: true,
   },

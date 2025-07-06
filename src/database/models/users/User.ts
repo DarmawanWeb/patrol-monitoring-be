@@ -6,7 +6,7 @@ import {
   type InferCreationAttributes,
   Model,
 } from 'sequelize';
-import type { Role } from '@/enums/role.enum';
+import { Role } from '@/enums/role.enum';
 
 interface UserModel
   extends Model<
@@ -58,8 +58,9 @@ User.init(
       allowNull: false,
     },
     role: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(Role.ADMIN, Role.USER, Role.SUPER_ADMIN, Role.GUEST),
       allowNull: false,
+      defaultValue: Role.GUEST,
     },
     active: {
       type: DataTypes.BOOLEAN,

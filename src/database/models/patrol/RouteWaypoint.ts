@@ -1,6 +1,7 @@
 import {
   type CreationOptional,
   DataTypes,
+  type ForeignKey,
   type InferAttributes,
   type InferCreationAttributes,
   Model,
@@ -13,17 +14,21 @@ interface RouteWaypointModel
     InferCreationAttributes<RouteWaypointModel>
   > {
   id: CreationOptional<number>;
-  routeId: number;
+  routeId: ForeignKey<number>;
   sequenceOrder: number;
   locationX: number;
   locationY: number;
   orientationZ: number;
   waypointType: string;
+  cameraPan: CreationOptional<number>;
+  cameraTilt: CreationOptional<number>;
+  rgbCameraZoom: CreationOptional<number>;
+  thermalCameraZoom: CreationOptional<number>;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
 }
 
-class PatrolRoute
+class RouteWaypoint
   extends Model<
     InferAttributes<RouteWaypointModel>,
     InferCreationAttributes<RouteWaypointModel>
@@ -31,19 +36,23 @@ class PatrolRoute
   implements RouteWaypointModel
 {
   declare id: CreationOptional<number>;
-  declare routeId: number;
+  declare routeId: ForeignKey<number>;
   declare sequenceOrder: number;
   declare locationX: number;
   declare locationY: number;
   declare orientationZ: number;
   declare waypointType: string;
+  declare cameraPan: CreationOptional<number>;
+  declare cameraTilt: CreationOptional<number>;
+  declare rgbCameraZoom: CreationOptional<number>;
+  declare thermalCameraZoom: CreationOptional<number>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
   declare sequence_order: number;
 }
 
-PatrolRoute.init(
+RouteWaypoint.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -54,7 +63,7 @@ PatrolRoute.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'PatrolRoute',
+        model: 'patrol_routes',
         key: 'id',
       },
     },
@@ -76,27 +85,36 @@ PatrolRoute.init(
     orientationZ: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      validate: {
-        min: -180,
-        max: 180,
-      },
     },
     waypointType: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
+    },
+    cameraPan: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    cameraTilt: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    rgbCameraZoom: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    thermalCameraZoom: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
   {
     sequelize,
-    modelName: 'PatrolRoute',
-    tableName: 'PatrolRoute',
+    modelName: 'RouteWaypoint',
+    tableName: 'route_waypoints',
     timestamps: true,
   },
 );
 
-export default PatrolRoute;
+export default RouteWaypoint;
