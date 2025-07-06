@@ -16,7 +16,7 @@ interface ComponentDetailModel
   > {
   serialNumber: string;
   name: string;
-  componentsId: ForeignKey<number>;
+  componentId: ForeignKey<number>;
   installedAt: Date;
   locationX: number;
   locationY: number;
@@ -35,7 +35,7 @@ class ComponentDetail
 {
   declare serialNumber: string;
   declare name: string;
-  declare componentsId: number;
+  declare componentId: ForeignKey<number>;
   declare installedAt: Date;
   declare locationX: number;
   declare locationY: number;
@@ -56,7 +56,7 @@ ComponentDetail.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    componentsId: {
+    componentId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

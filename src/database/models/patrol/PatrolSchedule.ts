@@ -7,7 +7,7 @@ import {
   Model,
 } from 'sequelize';
 import sequelize from '@/config/database.js';
-import { ScheduleType } from '@/enums/schedule.enum';
+import { ScheduleType } from '@/enums/schedule.enum.js';
 
 interface PatrolScheduleModel
   extends Model<
@@ -53,7 +53,7 @@ PatrolSchedule.init(
       autoIncrement: true,
     },
     robotId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'robots',

@@ -1,20 +1,19 @@
 import {
   type CreationOptional,
   DataTypes,
-  type ForeignKey,
   type InferAttributes,
   type InferCreationAttributes,
   Model,
 } from 'sequelize';
 import sequelize from '@/config/database.js';
 
-interface ComponentMaintenanceLogModel
+interface RobotMaintenanceLogModel
   extends Model<
-    InferAttributes<ComponentMaintenanceLogModel>,
-    InferCreationAttributes<ComponentMaintenanceLogModel>
+    InferAttributes<RobotMaintenanceLogModel>,
+    InferCreationAttributes<RobotMaintenanceLogModel>
   > {
   id: CreationOptional<number>;
-  componentSerialNumber: ForeignKey<string>;
+  robotId: string;
   description: CreationOptional<string | null>;
   performedAt: Date;
   performedBy: string;
@@ -22,15 +21,15 @@ interface ComponentMaintenanceLogModel
   updatedAt: CreationOptional<Date>;
 }
 
-class ComponentMaintenanceLog
+class RobotMaintenanceLog
   extends Model<
-    InferAttributes<ComponentMaintenanceLogModel>,
-    InferCreationAttributes<ComponentMaintenanceLogModel>
+    InferAttributes<RobotMaintenanceLogModel>,
+    InferCreationAttributes<RobotMaintenanceLogModel>
   >
-  implements ComponentMaintenanceLogModel
+  implements RobotMaintenanceLogModel
 {
   declare id: CreationOptional<number>;
-  declare componentSerialNumber: ForeignKey<string>;
+  declare robotId: string;
   declare description: CreationOptional<string | null>;
   declare performedAt: Date;
   declare performedBy: string;
@@ -38,19 +37,19 @@ class ComponentMaintenanceLog
   declare updatedAt: CreationOptional<Date>;
 }
 
-ComponentMaintenanceLog.init(
+RobotMaintenanceLog.init(
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    componentSerialNumber: {
-      type: DataTypes.STRING,
+    robotId: {
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'component_details',
-        key: 'serialNumber',
+        model: 'robots',
+        key: 'id',
       },
     },
     description: {
@@ -70,10 +69,10 @@ ComponentMaintenanceLog.init(
   },
   {
     sequelize,
-    modelName: 'ComponentMaintenanceLog',
-    tableName: 'component_maintenance_logs',
+    modelName: 'RobotMaintenanceLog',
+    tableName: 'robot_maintenance_logs',
     timestamps: true,
   },
 );
 
-export default ComponentMaintenanceLog;
+export default RobotMaintenanceLog;

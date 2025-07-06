@@ -7,7 +7,7 @@ import {
   Model,
 } from 'sequelize';
 import sequelize from '@/config/database.js';
-import { PatrolStatus } from '@/enums/patrol.enum';
+import { PatrolStatus } from '@/enums/patrol.enum.js';
 
 interface PatrolSessionModel
   extends Model<

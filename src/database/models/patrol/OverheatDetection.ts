@@ -7,7 +7,7 @@ import {
   Model,
 } from 'sequelize';
 import sequelize from '@/config/database.js';
-import { ResolutionStatus, SeverityLevel } from '@/enums/result.enum';
+import { ResolutionStatus, SeverityLevel } from '@/enums/result.enum.js';
 
 interface OverheatDetectionModel
   extends Model<

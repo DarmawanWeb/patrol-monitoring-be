@@ -48,8 +48,6 @@ class RouteWaypoint
   declare thermalCameraZoom: CreationOptional<number>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
-
-  declare sequence_order: number;
 }
 
 RouteWaypoint.init(

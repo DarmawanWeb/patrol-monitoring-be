@@ -6,7 +6,7 @@ import {
   type InferCreationAttributes,
   Model,
 } from 'sequelize';
-import { Role } from '@/enums/role.enum';
+import { Role } from '@/enums/role.enum.js';
 
 interface UserModel
   extends Model<

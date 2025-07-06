@@ -1,4 +1,4 @@
-import type { Role } from '@/enums/role.enum';
+import type { Role } from '@/enums/role.enum.js';
 
 export interface UserAttributes {
   id: number;
