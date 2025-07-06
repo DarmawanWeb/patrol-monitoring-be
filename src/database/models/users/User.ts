@@ -1,7 +1,42 @@
 import sequelize from '@config/database.js';
-import { DataTypes, Model } from 'sequelize';
+import {
+  type CreationOptional,
+  DataTypes,
+  type InferAttributes,
+  type InferCreationAttributes,
+  Model,
+} from 'sequelize';
+import type { Role } from '@/enums/role.enum';
 
-class User extends Model {}
+interface UserModel
+  extends Model<
+    InferAttributes<UserModel>,
+    InferCreationAttributes<UserModel>
+  > {
+  id: CreationOptional<number>;
+  name: string;
+  email: string;
+  password: string;
+  role: Role;
+  active: CreationOptional<boolean>;
+  createdAt: CreationOptional<Date>;
+  updatedAt: CreationOptional<Date>;
+}
+
+class User
+  extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>>
+  implements UserModel
+{
+  declare id: CreationOptional<number>;
+  declare name: string;
+  declare email: string;
+  declare password: string;
+  declare role: Role;
+  declare active: CreationOptional<boolean>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+}
+
 User.init(
   {
     id: {
@@ -30,6 +65,8 @@ User.init(
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   },
   {
     sequelize,

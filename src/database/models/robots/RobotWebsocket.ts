@@ -1,6 +1,7 @@
 import {
   type CreationOptional,
   DataTypes,
+  type ForeignKey,
   type InferAttributes,
   type InferCreationAttributes,
   Model,
@@ -13,7 +14,7 @@ interface RobotWebsocketModel
     InferCreationAttributes<RobotWebsocketModel>
   > {
   id: CreationOptional<number>;
-  robotId: string;
+  robotId: ForeignKey<string>;
   locationX: number;
   locationY: number;
   speed: number;
@@ -41,7 +42,7 @@ class RobotWebsocket
   implements RobotWebsocketModel
 {
   declare id: CreationOptional<number>;
-  declare robotId: string;
+  declare robotId: ForeignKey<string>;
   declare locationX: number;
   declare locationY: number;
   declare speed: number;

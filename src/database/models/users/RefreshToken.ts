@@ -1,7 +1,40 @@
 import sequelize from '@config/database.js';
-import { DataTypes, Model } from 'sequelize';
+import {
+  type CreationOptional,
+  DataTypes,
+  type ForeignKey,
+  type InferAttributes,
+  type InferCreationAttributes,
+  Model,
+} from 'sequelize';
 
-class RefreshToken extends Model {}
+interface RefreshTokenModel
+  extends Model<
+    InferAttributes<RefreshTokenModel>,
+    InferCreationAttributes<RefreshTokenModel>
+  > {
+  id: CreationOptional<number>;
+  userId: ForeignKey<number>;
+  token: string;
+  expiresAt: Date;
+  createdAt: CreationOptional<Date>;
+  updatedAt: CreationOptional<Date>;
+}
+
+class RefreshToken
+  extends Model<
+    InferAttributes<RefreshTokenModel>,
+    InferCreationAttributes<RefreshTokenModel>
+  >
+  implements RefreshTokenModel
+{
+  declare id: CreationOptional<number>;
+  declare userId: ForeignKey<number>;
+  declare token: string;
+  declare expiresAt: Date;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+}
 
 RefreshToken.init(
   {
@@ -26,6 +59,8 @@ RefreshToken.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   },
   {
     sequelize,

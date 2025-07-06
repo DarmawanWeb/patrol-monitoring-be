@@ -48,17 +48,10 @@ Robot.init(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [5, 50],
-      },
     },
     imagePath: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
     typeId: {
       type: DataTypes.INTEGER,

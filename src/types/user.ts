@@ -1,9 +1,11 @@
+import type { Role } from '@/enums/role.enum';
+
 export interface UserAttributes {
   id: number;
   name: string;
   email: string;
   password: string;
-  role: string;
+  role: Role;
   active: boolean;
   createdAt?: Date;
   updatedAt?: Date;

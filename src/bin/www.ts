@@ -25,7 +25,7 @@ const startServer = async (): Promise<void> => {
       logger.warn(`Port ${env.app.port} busy, using port ${availablePort}`);
     }
 
-    const server = app.listen(availablePort, () => {
+    const server = app.listen(availablePort, '0.0.0.0', () => {
       logger.info(`🚀 Server running on port ${availablePort}`);
       logger.info(`📊 Health: http://localhost:${availablePort}/api/v1/health`);
       logger.info(`🌍 Environment: ${env.app.env}`);

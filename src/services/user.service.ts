@@ -44,22 +44,26 @@ class UserService {
       throw new NotFoundError('User not found');
     }
 
-    const updateData: Partial<Pick<IUser, 'name' | 'email' | 'role'>> = {};
+    if (data.name) {
+      user.name = data.name.trim();
+    }
+    if (data.email) {
+      user.email = data.email.trim();
+    }
+    if (data.role) {
+      user.role = data.role;
+    }
 
-    if (data.name) updateData.name = data.name.trim();
-    if (data.email) updateData.email = data.email.trim();
-    if (data.role) updateData.role = data.role;
-
-    await user.update(updateData);
+    await user.save();
 
     const updatedUser = user.toJSON();
-    delete updatedUser.password;
+    const { password, ...userWithoutPassword } = updatedUser;
 
     return {
-      id: updatedUser.id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      role: updatedUser.role,
+      id: userWithoutPassword.id,
+      name: userWithoutPassword.name,
+      email: userWithoutPassword.email,
+      role: userWithoutPassword.role,
       active: true,
     };
   }
