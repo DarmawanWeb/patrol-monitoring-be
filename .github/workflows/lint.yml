@@ -23,8 +23,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run ESLint
+      - name: Run biome lint
         run: pnpm lint
-
-      - name: Run Prettier
+      
+      - name: Run format
         run: pnpm format
+
+      - name: Run typecheck
+        run: pnpm typecheck

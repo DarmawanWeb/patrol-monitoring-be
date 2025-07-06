@@ -14,6 +14,8 @@
     "seed": "npx sequelize-cli db:seed:all",
     "lint": "biome check src/",
     "lint:fix": "biome check --fix --unsafe src/ && biome format src/",
+    "format": "biome format src/",
+    "typecheck": "npx tsc --noEmit",
     "prepare": "lefthook install",
     "commit": "git-cz"
   },
