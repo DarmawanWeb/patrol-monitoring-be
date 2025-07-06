@@ -7,7 +7,7 @@ import {
   Model,
 } from 'sequelize';
 import sequelize from '@/config/database.js';
-import { ComponentStatus } from '@/enums/component.enum';
+import { ComponentStatus } from '@/enums/component.enum.js';
 
 interface ComponentDetailModel
   extends Model<

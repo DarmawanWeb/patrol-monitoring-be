@@ -39,12 +39,8 @@ const sequelize = new Sequelize(
     host: env.database.host,
     port: env.database.port,
     dialect: 'postgres',
-    logging: (sql) => {
-      // Enable logging to see which query is failing
-      logger.debug(`SQL: ${sql}`);
-    },
+    logging: false,
     define: {
-      // Add some default options
       freezeTableName: true,
       underscored: false,
     },
@@ -59,10 +55,8 @@ export const syncDatabase = async () => {
       'Connection to the database has been established successfully.',
     );
 
-    // Import all models to register them with Sequelize
     logger.info('Importing models...');
 
-    // Import models in dependency order
     const { User, RefreshToken } = await import(
       '@/database/models/users/index.js'
     );
