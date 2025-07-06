@@ -14,7 +14,7 @@ interface RobotMaintenanceLogModel
   > {
   id: CreationOptional<number>;
   robotId: string;
-  description: CreationOptional<string | null>;
+  description?: CreationOptional<string>;
   performedAt: Date;
   performedBy: string;
   createdAt: CreationOptional<Date>;
@@ -30,7 +30,7 @@ class RobotMaintenanceLog
 {
   declare id: CreationOptional<number>;
   declare robotId: string;
-  declare description: CreationOptional<string | null>;
+  declare description?: CreationOptional<string>;
   declare performedAt: Date;
   declare performedBy: string;
   declare createdAt: CreationOptional<Date>;

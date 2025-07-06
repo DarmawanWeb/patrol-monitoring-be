@@ -1,6 +1,5 @@
 import { Op } from 'sequelize';
 import logger from '@/config/logger.js';
-import { Robot, RobotWebsocket } from '@/database/models/robots/index.js';
 import type {
   RobotRouteData,
   RobotWithWebsockets,
@@ -12,6 +11,7 @@ import {
   calculateDuration,
   calculateTotalDistance,
 } from '@/utils/routes-math.js';
+import { Robot, RobotWebsocket } from '../../database/models/robots/index.js';
 
 export default class RobotWebsocketService {
   async storeWebsocketData(
