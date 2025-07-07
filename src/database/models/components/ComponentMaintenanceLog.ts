@@ -1,6 +1,7 @@
 import {
   type CreationOptional,
   DataTypes,
+  type ForeignKey,
   type InferAttributes,
   type InferCreationAttributes,
   Model,
@@ -13,7 +14,7 @@ interface RobotMaintenanceLogModel
     InferCreationAttributes<RobotMaintenanceLogModel>
   > {
   id: CreationOptional<number>;
-  robotId: string;
+  componentSerialNumber: ForeignKey<string>;
   description: CreationOptional<string | null>;
   performedAt: Date;
   performedBy: string;
@@ -29,7 +30,7 @@ class RobotMaintenanceLog
   implements RobotMaintenanceLogModel
 {
   declare id: CreationOptional<number>;
-  declare robotId: string;
+  declare componentSerialNumber: ForeignKey<string>;
   declare description: CreationOptional<string | null>;
   declare performedAt: Date;
   declare performedBy: string;
@@ -44,12 +45,12 @@ RobotMaintenanceLog.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    robotId: {
-      type: DataTypes.UUID,
+    componentSerialNumber: {
+      type: DataTypes.STRING,
       allowNull: false,
       references: {
-        model: 'robots',
-        key: 'id',
+        model: 'component_details',
+        key: 'serialNumber',
       },
     },
     description: {
