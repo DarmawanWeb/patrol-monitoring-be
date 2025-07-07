@@ -21,7 +21,7 @@ interface ComponentDetailModel
   locationX: number;
   locationY: number;
   locationZ: number;
-  status: ComponentStatus;
+  status?: ComponentStatus;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
 }
@@ -40,7 +40,7 @@ class ComponentDetail
   declare locationX: number;
   declare locationY: number;
   declare locationZ: number;
-  declare status: ComponentStatus;
+  declare status?: ComponentStatus;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
