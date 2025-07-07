@@ -20,8 +20,8 @@ interface OverheatDetectionModel
   waypointId: ForeignKey<number>;
   temperature: number;
   severityLevel: SeverityLevel;
-  thermalImagePath: string;
-  rgbImagePath: string;
+  thermalImagePath?: string;
+  rgbImagePath?: string;
   confidenceScore: number;
   isConfirmed: boolean;
   confirmedBy: CreationOptional<number>;
@@ -45,8 +45,8 @@ class OverheatDetection
   declare waypointId: ForeignKey<number>;
   declare temperature: number;
   declare severityLevel: SeverityLevel;
-  declare thermalImagePath: string;
-  declare rgbImagePath: string;
+  declare thermalImagePath?: string;
+  declare rgbImagePath?: string;
   declare confidenceScore: number;
   declare isConfirmed: boolean;
   declare confirmedBy: CreationOptional<number>;
