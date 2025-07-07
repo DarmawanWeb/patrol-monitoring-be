@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
-import AuthService from '@/services/auth.service.js';
+import AuthService from '@/services/users/auth.service.js';
 import type { AuthRequest } from '@/types/users/auth.js';
 import { handleError } from '@/utils/error.handler.js';
 
@@ -11,18 +10,7 @@ export const registerController = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      res.status(422).json({
-        message: 'Validation error',
-        errors: errors.array(),
-        success: false,
-      });
-      return;
-    }
-    const { name, email, password } = req.body;
-    const result = await authService.registerUser({ name, email, password });
-
+    const result = await authService.registerUser(req.body);
     res.status(200).json({
       message: 'User registered successfully',
       data: result,
@@ -38,23 +26,7 @@ export const registerWithRoleController = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      res.status(422).json({
-        message: 'Validation error',
-        errors: errors.array(),
-        success: false,
-      });
-      return;
-    }
-    const { name, email, password, role } = req.body;
-    const result = await authService.registerUser({
-      name,
-      email,
-      password,
-      role,
-    });
-
+    const result = await authService.registerUser(req.body);
     res.status(200).json({
       message: 'User registered successfully with role',
       data: result,
@@ -70,23 +42,10 @@ export const loginController = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      res.status(422).json({
-        message: 'Validation error',
-        errors: errors.array(),
-        success: false,
-      });
-      return;
-    }
-    const { email, password } = req.body;
-    const { accessToken, refreshToken, user } = await authService.loginUser(
-      email,
-      password,
-    );
+    const result = await authService.loginUser(req.body);
     res.status(200).json({
       message: 'User logged in successfully',
-      data: { accessToken, refreshToken, user },
+      data: result,
       success: true,
     });
   } catch (error: unknown) {
@@ -99,8 +58,7 @@ export const refreshController = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { refreshToken } = req.body;
-    const { accessToken } = await authService.refreshAccessToken(refreshToken);
+    const { accessToken } = await authService.refreshAccessToken(req.body);
     res.status(200).json({
       message: 'Access token refreshed successfully',
       data: { accessToken },
@@ -116,15 +74,7 @@ export const logoutController = async (
   res: Response,
 ): Promise<void> => {
   try {
-    if (!req.user) {
-      res.status(401).json({
-        message: 'User not authenticated',
-        success: false,
-      });
-      return;
-    }
-
-    const userId = req.user.id;
+    const userId = parseInt(String(req.user?.id || '0'));
     const result = await authService.logoutUser(userId);
     res.status(200).json({
       message: 'User logged out successfully',
@@ -141,15 +91,8 @@ export const userController = async (
   res: Response,
 ): Promise<void> => {
   try {
-    if (!req.user) {
-      res.status(401).json({
-        message: 'User not authenticated',
-        success: false,
-      });
-      return;
-    }
-
-    const userData = await authService.getUser(req.user.id);
+    const userId = parseInt(String(req.user?.id || '0'));
+    const userData = await authService.getUser(userId);
     res.status(200).json({
       message: 'User retrieved successfully',
       data: userData,

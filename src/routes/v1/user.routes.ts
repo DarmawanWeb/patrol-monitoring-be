@@ -3,7 +3,7 @@ import {
   deleteUserController,
   getAllUsersController,
   updateUserController,
-} from '@/controllers/user.controller.js';
+} from '@/controllers/users/user.controller.js';
 import { authMiddleware } from '@/middleware/auth.middleware.js';
 
 const router: Router = Router();

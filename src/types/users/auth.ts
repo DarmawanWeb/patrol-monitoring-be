@@ -8,6 +8,11 @@ export interface RegisterUserData {
   role?: Role;
 }
 
+export interface LoginUserData {
+  email: string;
+  password: string;
+}
+
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;

@@ -9,8 +9,8 @@ const startServer = async (): Promise<void> => {
   try {
     logger.info('🔄 Initializing database...');
     await syncDatabase();
-
     logger.info('✅ Database connected successfully');
+
     const app = createApp();
 
     const availableWsPort = await findAvailablePort(env.websocketPort);

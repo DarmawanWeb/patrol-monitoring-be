@@ -4,6 +4,7 @@ import { Role } from '@/enums/role.enum.js';
 import type {
   AuthTokens,
   AuthUser,
+  LoginUserData,
   RegisterUserData,
   UserResponse,
 } from '@/types/users/auth.js';
@@ -89,13 +90,13 @@ export default class AuthService {
   };
 
   loginUser = async (
-    email: string,
-    password: string,
+    data: LoginUserData,
   ): Promise<{
     accessToken: string;
     refreshToken: string;
     user: UserResponse;
   }> => {
+    const { email, password } = data;
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
