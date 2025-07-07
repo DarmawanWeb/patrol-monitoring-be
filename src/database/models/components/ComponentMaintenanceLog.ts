@@ -8,10 +8,10 @@ import {
 } from 'sequelize';
 import sequelize from '@/config/database.js';
 
-interface RobotMaintenanceLogModel
+interface ComponentMaintenanceLogModel
   extends Model<
-    InferAttributes<RobotMaintenanceLogModel>,
-    InferCreationAttributes<RobotMaintenanceLogModel>
+    InferAttributes<ComponentMaintenanceLogModel>,
+    InferCreationAttributes<ComponentMaintenanceLogModel>
   > {
   id: CreationOptional<number>;
   componentSerialNumber: ForeignKey<string>;
@@ -22,12 +22,12 @@ interface RobotMaintenanceLogModel
   updatedAt: CreationOptional<Date>;
 }
 
-class RobotMaintenanceLog
+class ComponentMaintenanceLog
   extends Model<
-    InferAttributes<RobotMaintenanceLogModel>,
-    InferCreationAttributes<RobotMaintenanceLogModel>
+    InferAttributes<ComponentMaintenanceLogModel>,
+    InferCreationAttributes<ComponentMaintenanceLogModel>
   >
-  implements RobotMaintenanceLogModel
+  implements ComponentMaintenanceLogModel
 {
   declare id: CreationOptional<number>;
   declare componentSerialNumber: ForeignKey<string>;
@@ -38,7 +38,7 @@ class RobotMaintenanceLog
   declare updatedAt: CreationOptional<Date>;
 }
 
-RobotMaintenanceLog.init(
+ComponentMaintenanceLog.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -70,10 +70,10 @@ RobotMaintenanceLog.init(
   },
   {
     sequelize,
-    modelName: 'RobotMaintenanceLog',
-    tableName: 'robot_maintenance_logs',
+    modelName: 'ComponentMaintenanceLog',
+    tableName: 'components_maintenance_logs',
     timestamps: true,
   },
 );
 
-export default RobotMaintenanceLog;
+export default ComponentMaintenanceLog;
