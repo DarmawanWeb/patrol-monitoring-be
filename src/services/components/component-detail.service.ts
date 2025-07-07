@@ -3,23 +3,23 @@ import {
   ComponentDetail,
 } from '@/database/models/components/index.js';
 import type {
-  IComponentDetail,
-  ICreateComponentDetail,
-  IUpdateComponentDetail,
+  ComponentDetailCreateData,
+  ComponentDetailResponse,
+  ComponentDetailUpdateData,
 } from '@/types/components/component-detail.js';
 import { NotFoundError } from '@/utils/base.error.js';
 
 class ComponentDetailService {
   async createComponentDetail(
-    data: ICreateComponentDetail,
-  ): Promise<IComponentDetail> {
+    data: ComponentDetailCreateData,
+  ): Promise<ComponentDetailResponse> {
     const componentDetail = await ComponentDetail.create(data);
-    return componentDetail.toJSON() as IComponentDetail;
+    return componentDetail.toJSON() as ComponentDetailResponse;
   }
 
   async getComponentDetailBySerialNumber(
     serialNumber: string,
-  ): Promise<IComponentDetail> {
+  ): Promise<ComponentDetailResponse> {
     const componentDetail = await ComponentDetail.findByPk(serialNumber, {
       include: [
         {
@@ -32,10 +32,10 @@ class ComponentDetailService {
     if (!componentDetail) {
       throw new NotFoundError('Component detail not found');
     }
-    return componentDetail.toJSON() as IComponentDetail;
+    return componentDetail.toJSON() as ComponentDetailResponse;
   }
 
-  async getAllComponentDetails(): Promise<IComponentDetail[]> {
+  async getAllComponentDetails(): Promise<ComponentDetailResponse[]> {
     const componentDetails = await ComponentDetail.findAll({
       include: [
         {
@@ -47,13 +47,13 @@ class ComponentDetailService {
       order: [['createdAt', 'DESC']],
     });
     return componentDetails.map(
-      (detail) => detail.toJSON() as IComponentDetail,
+      (detail) => detail.toJSON() as ComponentDetailResponse,
     );
   }
 
   async getComponentDetailsByComponentId(
     componentId: number,
-  ): Promise<IComponentDetail[]> {
+  ): Promise<ComponentDetailResponse[]> {
     const componentDetails = await ComponentDetail.findAll({
       where: { componentId },
       include: [
@@ -66,20 +66,20 @@ class ComponentDetailService {
       order: [['createdAt', 'DESC']],
     });
     return componentDetails.map(
-      (detail) => detail.toJSON() as IComponentDetail,
+      (detail) => detail.toJSON() as ComponentDetailResponse,
     );
   }
 
   async updateComponentDetail(
     serialNumber: string,
-    data: IUpdateComponentDetail,
-  ): Promise<IComponentDetail> {
+    data: ComponentDetailUpdateData,
+  ): Promise<ComponentDetailResponse> {
     const componentDetail = await ComponentDetail.findByPk(serialNumber);
     if (!componentDetail) {
       throw new NotFoundError('Component detail not found');
     }
 
-    const updateData: Partial<IUpdateComponentDetail> = {};
+    const updateData: Partial<ComponentDetailUpdateData> = {};
     if (data.name) updateData.name = data.name.trim();
     if (data.componentId) updateData.componentId = data.componentId;
     if (data.installedAt) updateData.installedAt = data.installedAt;
@@ -89,7 +89,7 @@ class ComponentDetailService {
     if (data.status) updateData.status = data.status;
 
     await componentDetail.update(updateData);
-    return componentDetail.toJSON() as IComponentDetail;
+    return componentDetail.toJSON() as ComponentDetailResponse;
   }
 
   async deleteComponentDetail(serialNumber: string): Promise<void> {

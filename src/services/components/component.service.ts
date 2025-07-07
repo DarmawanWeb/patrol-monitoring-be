@@ -3,19 +3,19 @@ import {
   ComponentType,
 } from '@/database/models/components/index.js';
 import type {
-  IComponent,
-  ICreateComponent,
-  IUpdateComponent,
+  ComponentCreateData,
+  ComponentResponse,
+  ComponentUpdateData,
 } from '@/types/components/component.js';
 import { NotFoundError } from '@/utils/base.error.js';
 
 class ComponentService {
-  async createComponent(data: ICreateComponent): Promise<IComponent> {
+  async createComponent(data: ComponentCreateData): Promise<ComponentResponse> {
     const component = await Component.create(data);
-    return component.toJSON() as IComponent;
+    return component.toJSON() as ComponentResponse;
   }
 
-  async getComponentById(id: number): Promise<IComponent> {
+  async getComponentById(id: number): Promise<ComponentResponse> {
     const component = await Component.findByPk(id, {
       include: [
         {
@@ -28,10 +28,10 @@ class ComponentService {
     if (!component) {
       throw new NotFoundError('Component not found');
     }
-    return component.toJSON() as IComponent;
+    return component.toJSON() as ComponentResponse;
   }
 
-  async getAllComponents(): Promise<IComponent[]> {
+  async getAllComponents(): Promise<ComponentResponse[]> {
     const components = await Component.findAll({
       include: [
         {
@@ -42,19 +42,21 @@ class ComponentService {
       ],
       order: [['createdAt', 'DESC']],
     });
-    return components.map((component) => component.toJSON() as IComponent);
+    return components.map(
+      (component) => component.toJSON() as ComponentResponse,
+    );
   }
 
   async updateComponent(
     id: number,
-    data: IUpdateComponent,
-  ): Promise<IComponent> {
+    data: ComponentUpdateData,
+  ): Promise<ComponentResponse> {
     const component = await Component.findByPk(id);
     if (!component) {
       throw new NotFoundError('Component not found');
     }
 
-    const updateData: Partial<IUpdateComponent> = {};
+    const updateData: Partial<ComponentUpdateData> = {};
     if (data.name) updateData.name = data.name.trim();
     if (data.typeId) updateData.typeId = data.typeId;
     if (data.model) updateData.model = data.model.trim();
@@ -65,7 +67,7 @@ class ComponentService {
       updateData.overheat_temp_threshold = data.overheat_temp_threshold;
 
     await component.update(updateData);
-    return component.toJSON() as IComponent;
+    return component.toJSON() as ComponentResponse;
   }
 
   async deleteComponent(id: number): Promise<void> {

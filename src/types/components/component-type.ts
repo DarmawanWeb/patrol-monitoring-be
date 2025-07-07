@@ -1,14 +1,14 @@
-export interface ICreateComponentType {
+export interface ComponentTypeCreateData {
   name: string;
   icon: string;
 }
 
-export interface IUpdateComponentType {
+export interface ComponentTypeUpdateData {
   name?: string;
   icon?: string;
 }
 
-export interface IComponentType {
+export interface ComponentTypeResponse {
   id: number;
   name: string;
   icon: string;

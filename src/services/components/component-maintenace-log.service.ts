@@ -3,23 +3,23 @@ import {
   ComponentMaintenanceLog,
 } from '@/database/models/components/index.js';
 import type {
-  IComponentMaintenanceLog,
-  ICreateComponentMaintenanceLog,
-  IUpdateComponentMaintenanceLog,
+  ComponentMaintenanceLogCreateData,
+  ComponentMaintenanceLogResponse,
+  ComponentMaintenanceLogUpdateData,
 } from '@/types/components/component-maintenance-log.js';
 import { NotFoundError } from '@/utils/base.error.js';
 
 class ComponentMaintenanceLogService {
   async createComponentMaintenanceLog(
-    data: ICreateComponentMaintenanceLog,
-  ): Promise<IComponentMaintenanceLog> {
+    data: ComponentMaintenanceLogCreateData,
+  ): Promise<ComponentMaintenanceLogResponse> {
     const maintenanceLog = await ComponentMaintenanceLog.create(data);
-    return maintenanceLog.toJSON() as IComponentMaintenanceLog;
+    return maintenanceLog.toJSON() as ComponentMaintenanceLogResponse;
   }
 
   async getComponentMaintenanceLogById(
     id: number,
-  ): Promise<IComponentMaintenanceLog> {
+  ): Promise<ComponentMaintenanceLogResponse> {
     const maintenanceLog = await ComponentMaintenanceLog.findByPk(id, {
       include: [
         {
@@ -32,10 +32,12 @@ class ComponentMaintenanceLogService {
     if (!maintenanceLog) {
       throw new NotFoundError('Component maintenance log not found');
     }
-    return maintenanceLog.toJSON() as IComponentMaintenanceLog;
+    return maintenanceLog.toJSON() as ComponentMaintenanceLogResponse;
   }
 
-  async getAllComponentMaintenanceLogs(): Promise<IComponentMaintenanceLog[]> {
+  async getAllComponentMaintenanceLogs(): Promise<
+    ComponentMaintenanceLogResponse[]
+  > {
     const maintenanceLogs = await ComponentMaintenanceLog.findAll({
       include: [
         {
@@ -47,13 +49,13 @@ class ComponentMaintenanceLogService {
       order: [['performedAt', 'DESC']],
     });
     return maintenanceLogs.map(
-      (log) => log.toJSON() as IComponentMaintenanceLog,
+      (log) => log.toJSON() as ComponentMaintenanceLogResponse,
     );
   }
 
   async getComponentMaintenanceLogsBySerialNumber(
     componentSerialNumber: string,
-  ): Promise<IComponentMaintenanceLog[]> {
+  ): Promise<ComponentMaintenanceLogResponse[]> {
     const maintenanceLogs = await ComponentMaintenanceLog.findAll({
       where: { componentSerialNumber },
       include: [
@@ -66,27 +68,27 @@ class ComponentMaintenanceLogService {
       order: [['performedAt', 'DESC']],
     });
     return maintenanceLogs.map(
-      (log) => log.toJSON() as IComponentMaintenanceLog,
+      (log) => log.toJSON() as ComponentMaintenanceLogResponse,
     );
   }
 
   async updateComponentMaintenanceLog(
     id: number,
-    data: IUpdateComponentMaintenanceLog,
-  ): Promise<IComponentMaintenanceLog> {
+    data: ComponentMaintenanceLogUpdateData,
+  ): Promise<ComponentMaintenanceLogResponse> {
     const maintenanceLog = await ComponentMaintenanceLog.findByPk(id);
     if (!maintenanceLog) {
       throw new NotFoundError('Component maintenance log not found');
     }
 
-    const updateData: Partial<IUpdateComponentMaintenanceLog> = {};
+    const updateData: Partial<ComponentMaintenanceLogUpdateData> = {};
     if (data.description !== undefined)
       updateData.description = data.description?.trim();
     if (data.performedAt) updateData.performedAt = data.performedAt;
     if (data.performedBy) updateData.performedBy = data.performedBy.trim();
 
     await maintenanceLog.update(updateData);
-    return maintenanceLog.toJSON() as IComponentMaintenanceLog;
+    return maintenanceLog.toJSON() as ComponentMaintenanceLogResponse;
   }
 
   async deleteComponentMaintenanceLog(id: number): Promise<void> {

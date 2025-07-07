@@ -1,17 +1,17 @@
-export interface ICreateComponentMaintenanceLog {
+export interface ComponentMaintenanceLogCreateData {
   componentSerialNumber: string;
   description?: string;
   performedAt: Date;
   performedBy: string;
 }
 
-export interface IUpdateComponentMaintenanceLog {
+export interface ComponentMaintenanceLogUpdateData {
   description?: string;
   performedAt?: Date;
   performedBy?: string;
 }
 
-export interface IComponentMaintenanceLog {
+export interface ComponentMaintenanceLogResponse {
   componentSerialNumber: string;
   description: string | null;
   performedAt: Date;

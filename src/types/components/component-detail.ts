@@ -1,6 +1,6 @@
 import type { ComponentStatus } from '@/enums/component.enum.js';
 
-export interface ICreateComponentDetail {
+export interface ComponentDetailCreateData {
   serialNumber: string;
   name: string;
   componentId: number;
@@ -11,7 +11,7 @@ export interface ICreateComponentDetail {
   status?: ComponentStatus;
 }
 
-export interface IUpdateComponentDetail {
+export interface ComponentDetailUpdateData {
   name?: string;
   componentId?: number;
   installedAt?: Date;
@@ -21,7 +21,7 @@ export interface IUpdateComponentDetail {
   status?: ComponentStatus;
 }
 
-export interface IComponentDetail {
+export interface ComponentDetailResponse {
   serialNumber: string;
   name: string;
   componentId: number;

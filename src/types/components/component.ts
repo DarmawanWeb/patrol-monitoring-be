@@ -1,4 +1,4 @@
-export interface ICreateComponent {
+export interface ComponentCreateData {
   name: string;
   typeId: number;
   model: string;
@@ -7,7 +7,7 @@ export interface ICreateComponent {
   overheat_temp_threshold: number;
 }
 
-export interface IUpdateComponent {
+export interface ComponentUpdateData {
   name?: string;
   typeId?: number;
   model?: string;
@@ -16,7 +16,7 @@ export interface IUpdateComponent {
   overheat_temp_threshold?: number;
 }
 
-export interface IComponent {
+export interface ComponentResponse {
   id: number;
   name: string;
   typeId: number;

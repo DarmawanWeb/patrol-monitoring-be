@@ -20,10 +20,8 @@ const router: Router = express.Router();
 
 router.use(authMiddleware);
 
-// Get all component maintenance logs
 router.get('/', getAllComponentMaintenanceLogsController);
 
-// Get component maintenance logs by component serial number
 router.get(
   '/component/:serialNumber',
   serialNumberParamValidator,
@@ -31,7 +29,6 @@ router.get(
   getComponentMaintenanceLogsBySerialNumberController,
 );
 
-// Get component maintenance log by ID
 router.get(
   '/:id',
   idParamValidator,
@@ -39,7 +36,6 @@ router.get(
   getComponentMaintenanceLogByIdController,
 );
 
-// Create component maintenance log
 router.post(
   '/',
   createComponentMaintenanceLogValidators,
@@ -47,7 +43,6 @@ router.post(
   createComponentMaintenanceLogController,
 );
 
-// Update component maintenance log
 router.patch(
   '/:id',
   idParamValidator,
@@ -56,7 +51,6 @@ router.patch(
   updateComponentMaintenanceLogController,
 );
 
-// Delete component maintenance log
 router.delete(
   '/:id',
   idParamValidator,

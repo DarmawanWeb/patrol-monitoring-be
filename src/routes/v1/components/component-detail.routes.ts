@@ -20,10 +20,8 @@ const router: Router = express.Router();
 
 router.use(authMiddleware);
 
-// Get all component details
 router.get('/', getAllComponentDetailsController);
 
-// Get component details by component ID
 router.get(
   '/component/:componentId',
   componentIdParamValidator,
@@ -31,7 +29,6 @@ router.get(
   getComponentDetailsByComponentIdController,
 );
 
-// Get component detail by serial number
 router.get(
   '/:serialNumber',
   serialNumberParamValidator,
@@ -39,7 +36,6 @@ router.get(
   getComponentDetailBySerialNumberController,
 );
 
-// Create component detail
 router.post(
   '/',
   createComponentDetailValidators,
@@ -47,7 +43,6 @@ router.post(
   createComponentDetailController,
 );
 
-// Update component detail
 router.patch(
   '/:serialNumber',
   serialNumberParamValidator,
@@ -56,7 +51,6 @@ router.patch(
   updateComponentDetailController,
 );
 
-// Delete component detail
 router.delete(
   '/:serialNumber',
   serialNumberParamValidator,
