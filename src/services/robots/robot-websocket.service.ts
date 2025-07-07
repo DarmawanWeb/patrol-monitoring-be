@@ -5,7 +5,7 @@ import type {
   RobotWithWebsockets,
   RoutePoint,
   WebSocketRobotData,
-} from '@/types/robot-websocket.js';
+} from '@/types/robots/robot-websocket.js';
 import { NotFoundError } from '@/utils/base.error.js';
 import {
   calculateDuration,

@@ -1,4 +1,4 @@
-import PatrolSchedule from '../patrol/PatrolSchedule.js';
+import PatrolSchedule from '../patrols/PatrolSchedule.js';
 import Robot from './Robot.js';
 import RobotMaintenanceLog from './RobotMaintenanceLog.js';
 import RobotType from './RobotType.js';

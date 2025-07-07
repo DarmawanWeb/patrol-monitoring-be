@@ -3,7 +3,7 @@ import type {
   IRobotMaintenanceLog,
   IRobotMaintenanceLogCreate,
   IRobotMaintenanceLogUpdate,
-} from '@/types/robot-maintenance-log.js';
+} from '@/types/robots/robot-maintenance-log.js';
 import { NotFoundError } from '@/utils/base.error.js';
 
 class RobotMaintenanceLogService {

@@ -1,6 +1,6 @@
 import { col, fn } from 'sequelize';
 import { Robot, RobotType } from '@/database/models/robots/index.js';
-import type { IRobotType, RobotTypeInput } from '@/types/robot-type.js';
+import type { IRobotType, RobotTypeInput } from '@/types/robots/robot-type.js';
 import { NotFoundError, ValidationError } from '@/utils/base.error.js';
 
 class RobotTypeService {

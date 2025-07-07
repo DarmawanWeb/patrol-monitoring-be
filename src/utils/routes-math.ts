@@ -1,4 +1,4 @@
-import type { RoutePoint } from '@/types/robot-websocket';
+import type { RoutePoint } from '@/types/robots/robot-websocket';
 
 export function calculateTotalDistance(path: RoutePoint[]): number {
   let dist = 0;

@@ -6,7 +6,7 @@ import type {
   AuthUser,
   RegisterUserData,
   UserResponse,
-} from '@/types/auth.js';
+} from '@/types/users/auth.js';
 import {
   AuthenticationError,
   ConflictError,

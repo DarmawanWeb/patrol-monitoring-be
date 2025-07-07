@@ -69,7 +69,7 @@ export const syncDatabase = async () => {
     const { RobotType, Robot, RobotWebsocket, RobotMaintenanceLog } =
       await import('@/database/models/robots/index.js');
     const { PatrolRoute, RouteWaypoint, PatrolSchedule, PatrolSession } =
-      await import('@/database/models/patrol/index.js');
+      await import('@/database/models/patrols/index.js');
 
     logger.info('All models imported. Starting synchronization...');
 

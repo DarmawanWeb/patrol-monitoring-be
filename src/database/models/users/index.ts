@@ -1,4 +1,4 @@
-import OverheatDetection from '../patrol/OverheatDetection.js';
+import OverheatDetection from '../patrols/OverheatDetection.js';
 import RefreshToken from './RefreshToken.js';
 import User from './User.js';
 

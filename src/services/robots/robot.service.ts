@@ -13,7 +13,7 @@ import type {
   IRobot,
   UpdateRobotInput,
   UpdateRobotWithImageInput,
-} from '@/types/robot.js';
+} from '@/types/robots/robot.js';
 import { NotFoundError, ValidationError } from '@/utils/base.error.js';
 
 class RobotService {
