@@ -1,5 +1,3 @@
-// src/services/components/component-type.service.ts
-
 import { ComponentType } from '@/database/models/components/index.js';
 import type {
   IComponentType,
