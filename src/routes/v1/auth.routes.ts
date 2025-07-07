@@ -8,7 +8,7 @@ import {
   userController,
 } from '@/controllers/users/auth.controller.js';
 import { authMiddleware } from '@/middleware/auth.middleware.js';
-import { validationMiddleware } from '@/middleware/validation.middleware';
+import { validationMiddleware } from '@/middleware/validation.middleware.js';
 import {
   loginValidators,
   registerValidators,

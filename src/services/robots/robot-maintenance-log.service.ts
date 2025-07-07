@@ -1,22 +1,22 @@
 import { RobotMaintenanceLog } from '@/database/models/robots/index.js';
 import type {
-  IRobotMaintenanceLog,
-  IRobotMaintenanceLogCreate,
-  IRobotMaintenanceLogUpdate,
+  RobotMaintenanceLogCreateData,
+  RobotMaintenanceLogResponse,
+  RobotMaintenanceLogUpdateData,
 } from '@/types/robots/robot-maintenance-log.js';
 import { NotFoundError } from '@/utils/base.error.js';
 
 class RobotMaintenanceLogService {
   async createLog(
-    data: IRobotMaintenanceLogCreate,
-  ): Promise<IRobotMaintenanceLog> {
+    data: RobotMaintenanceLogCreateData,
+  ): Promise<RobotMaintenanceLogResponse> {
     const log = await RobotMaintenanceLog.create(data);
     return log.toJSON();
   }
 
   async getAllLogs(
     options: { page?: number; limit?: number } = {},
-  ): Promise<IRobotMaintenanceLog[]> {
+  ): Promise<RobotMaintenanceLogResponse[]> {
     const { page = 1, limit = 50 } = options;
     const offset = (page - 1) * limit;
     const logs = await RobotMaintenanceLog.findAll({
@@ -27,10 +27,12 @@ class RobotMaintenanceLogService {
     if (!logs.length) {
       throw new NotFoundError('No maintenance logs found');
     }
-    return logs.map((log) => log.toJSON()) as IRobotMaintenanceLog[];
+    return logs.map((log) => log.toJSON()) as RobotMaintenanceLogResponse[];
   }
 
-  async getLogsByRobotId(robotId: string): Promise<IRobotMaintenanceLog[]> {
+  async getLogsByRobotId(
+    robotId: string,
+  ): Promise<RobotMaintenanceLogResponse[]> {
     const logs = await RobotMaintenanceLog.findAll({
       where: { robotId },
       order: [['performedAt', 'DESC']],
@@ -39,10 +41,10 @@ class RobotMaintenanceLogService {
     if (!logs.length) {
       throw new NotFoundError('No maintenance logs found for this robot');
     }
-    return logs.map((log) => log.toJSON()) as IRobotMaintenanceLog[];
+    return logs.map((log) => log.toJSON()) as RobotMaintenanceLogResponse[];
   }
 
-  async getLogById(id: number): Promise<IRobotMaintenanceLog> {
+  async getLogById(id: number): Promise<RobotMaintenanceLogResponse> {
     const log = await RobotMaintenanceLog.findByPk(id);
 
     if (!log) {
@@ -53,8 +55,8 @@ class RobotMaintenanceLogService {
 
   async updateLog(
     id: number,
-    data: IRobotMaintenanceLogUpdate,
-  ): Promise<IRobotMaintenanceLog> {
+    data: RobotMaintenanceLogUpdateData,
+  ): Promise<RobotMaintenanceLogResponse> {
     const log = await RobotMaintenanceLog.findByPk(id);
     if (!log) {
       throw new NotFoundError('Maintenance log not found');

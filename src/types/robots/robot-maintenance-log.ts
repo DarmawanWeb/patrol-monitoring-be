@@ -1,18 +1,18 @@
-export interface IRobotMaintenanceLog {
+export interface RobotMaintenanceLogResponse {
   robotId: string;
   description?: string;
   performedAt: Date;
   performedBy: string;
 }
 
-export interface IRobotMaintenanceLogCreate {
+export interface RobotMaintenanceLogCreateData {
   robotId: string;
   description?: string;
   performedAt: Date;
   performedBy: string;
 }
 
-export interface IRobotMaintenanceLogUpdate {
+export interface RobotMaintenanceLogUpdateData {
   description?: string;
   performedAt?: Date;
   performedBy?: string;

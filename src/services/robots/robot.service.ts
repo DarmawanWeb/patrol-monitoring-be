@@ -8,21 +8,23 @@ import {
 
 import type { PaginatedResult } from '@/types/general.js';
 import type {
-  CreateRobotInput,
-  CreateRobotWithImageInput,
-  IRobot,
-  UpdateRobotInput,
-  UpdateRobotWithImageInput,
+  CreateRobotData,
+  CreateRobotWithImageData,
+  RobotResponse,
+  UpdateRobotData,
+  UpdateRobotWithImageData,
 } from '@/types/robots/robot.js';
 import { NotFoundError, ValidationError } from '@/utils/base.error.js';
 
 class RobotService {
-  async createRobot(data: CreateRobotInput): Promise<IRobot> {
+  async createRobot(data: CreateRobotData): Promise<RobotResponse> {
     const robot = await Robot.create(data);
-    return robot.toJSON() as IRobot;
+    return robot.toJSON() as RobotResponse;
   }
 
-  async createRobotWithImage(data: CreateRobotWithImageInput): Promise<IRobot> {
+  async createRobotWithImage(
+    data: CreateRobotWithImageData,
+  ): Promise<RobotResponse> {
     if (!data.tempFilePath || !fs.existsSync(data.tempFilePath)) {
       throw new ValidationError('Temporary file not found');
     }
@@ -49,7 +51,7 @@ class RobotService {
       fs.renameSync(data.tempFilePath, finalPath);
       await robot.update({ imagePath: finalPath });
 
-      return robot.toJSON() as IRobot;
+      return robot.toJSON() as RobotResponse;
     } catch (error) {
       if (fs.existsSync(data.tempFilePath)) {
         try {
@@ -114,7 +116,7 @@ class RobotService {
     };
   }
 
-  async getRobotById(id: string): Promise<IRobot> {
+  async getRobotById(id: string): Promise<RobotResponse> {
     const robot = await Robot.findByPk(id, {
       include: [
         {
@@ -128,15 +130,15 @@ class RobotService {
     if (!robot) {
       throw new NotFoundError('Robot not found');
     }
-    return robot.toJSON() as IRobot;
+    return robot.toJSON() as RobotResponse;
   }
 
   async updateRobotWithImage(
     id: string,
-    data: UpdateRobotWithImageInput,
-  ): Promise<IRobot> {
+    data: UpdateRobotWithImageData,
+  ): Promise<RobotResponse> {
     const robot = await Robot.findByPk(id);
-    const updateData: UpdateRobotInput = {
+    const updateData: UpdateRobotData = {
       name: data.name,
       typeId: data.typeId,
       description: data.description,
@@ -163,7 +165,7 @@ class RobotService {
         updateData.imagePath = finalPath;
       }
       await robot?.update(updateData);
-      return robot?.toJSON() as IRobot;
+      return robot?.toJSON() as RobotResponse;
     } catch (error) {
       if (data.newFilePath && fs.existsSync(data.newFilePath)) {
         fs.unlinkSync(data.newFilePath);

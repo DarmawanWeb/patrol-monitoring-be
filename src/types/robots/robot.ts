@@ -1,11 +1,11 @@
-export interface IRobotType {
+export interface RobotTypeResponse {
   id: number;
   name: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export interface IRobot {
+export interface RobotResponse {
   id: string;
   name: string;
   imagePath: string;
@@ -15,14 +15,14 @@ export interface IRobot {
   updatedAt?: Date;
 }
 
-export interface CreateRobotInput {
+export interface CreateRobotData {
   name: string;
   typeId: number;
   imagePath: string;
   description?: string;
 }
 
-export interface CreateRobotWithImageInput {
+export interface CreateRobotWithImageData {
   name: string;
   typeId: number;
   description?: string;
@@ -30,14 +30,14 @@ export interface CreateRobotWithImageInput {
   originalName: string;
 }
 
-export interface UpdateRobotInput {
+export interface UpdateRobotData {
   name?: string;
   typeId?: number;
   imagePath?: string;
   description?: string;
 }
 
-export interface UpdateRobotWithImageInput {
+export interface UpdateRobotWithImageData {
   name?: string;
   typeId?: number;
   description?: string;

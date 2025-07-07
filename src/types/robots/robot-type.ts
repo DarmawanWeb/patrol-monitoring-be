@@ -1,4 +1,4 @@
-export interface IRobotType {
+export interface RobotTypeResponse {
   id: number;
   name: string;
   robotCount?: number;
@@ -6,6 +6,6 @@ export interface IRobotType {
   updatedAt?: Date;
 }
 
-export interface RobotTypeInput {
+export interface RobotTypeData {
   name: string;
 }
