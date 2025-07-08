@@ -68,8 +68,13 @@ export const syncDatabase = async () => {
     } = await import('@/database/models/components/index.js');
     const { RobotType, Robot, RobotWebsocket, RobotMaintenanceLog } =
       await import('@/database/models/robots/index.js');
-    const { PatrolRoute, RouteWaypoint, PatrolSchedule, PatrolSession } =
-      await import('@/database/models/patrols/index.js');
+    const {
+      PatrolRoute,
+      RouteWaypoint,
+      PatrolSchedule,
+      PatrolSession,
+      OverheatDetection,
+    } = await import('@/database/models/patrols/index.js');
 
     logger.info('All models imported. Starting synchronization...');
 
@@ -91,6 +96,8 @@ export const syncDatabase = async () => {
 
       { name: 'PatrolSession', model: PatrolSession },
       { name: 'ComponentMaintenanceLog', model: ComponentMaintenanceLog },
+      { name: 'PatrolSession', model: PatrolSession },
+      { name: 'OverheatDetection', model: OverheatDetection },
     ];
 
     for (const { name, model } of syncOrder) {

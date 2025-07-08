@@ -11,6 +11,11 @@ export interface RouteWaypointCreateData {
   thermalCameraZoom?: number;
 }
 
+export interface RouteWaypointBulkCreateData {
+  routeId: number;
+  waypoints: Omit<RouteWaypointCreateData, 'routeId'>[];
+}
+
 export interface RouteWaypointUpdateData {
   routeId?: number;
   sequenceOrder?: number;

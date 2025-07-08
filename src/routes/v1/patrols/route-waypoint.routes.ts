@@ -1,7 +1,9 @@
 import express, { type Router } from 'express';
 import {
+  createMultipleRouteWaypointsController,
   createRouteWaypointController,
   deleteRouteWaypointController,
+  deleteRouteWaypointsByRouteIdController,
   getAllRouteWaypointsController,
   getRouteWaypointByIdController,
   getRouteWaypointsByRouteIdController,
@@ -11,6 +13,7 @@ import { authMiddleware } from '@/middleware/auth.middleware.js';
 import { validationMiddleware } from '@/middleware/validation.middleware.js';
 import { idParamValidator } from '@/validators/general.validators.js';
 import {
+  createMultipleRouteWaypointsValidators,
   createRouteWaypointValidators,
   routeIdParamValidator,
   updateRouteWaypointValidators,
@@ -20,6 +23,7 @@ const router: Router = express.Router();
 
 router.use(authMiddleware);
 
+// Get all route waypoints
 router.get('/', getAllRouteWaypointsController);
 
 router.get(
@@ -43,6 +47,13 @@ router.post(
   createRouteWaypointController,
 );
 
+router.post(
+  '/bulk',
+  createMultipleRouteWaypointsValidators,
+  validationMiddleware,
+  createMultipleRouteWaypointsController,
+);
+
 router.patch(
   '/:id',
   idParamValidator,
@@ -56,6 +67,13 @@ router.delete(
   idParamValidator,
   validationMiddleware,
   deleteRouteWaypointController,
+);
+
+router.delete(
+  '/route/:routeId',
+  routeIdParamValidator,
+  validationMiddleware,
+  deleteRouteWaypointsByRouteIdController,
 );
 
 export default router;

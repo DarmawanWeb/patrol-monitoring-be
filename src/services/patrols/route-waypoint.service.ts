@@ -1,5 +1,8 @@
+import type { Transaction } from 'sequelize';
+import sequelize from '@/config/database.js';
 import { PatrolRoute, RouteWaypoint } from '@/database/models/patrols/index.js';
 import type {
+  RouteWaypointBulkCreateData,
   RouteWaypointCreateData,
   RouteWaypointResponse,
   RouteWaypointUpdateData,
@@ -12,6 +15,59 @@ class RouteWaypointService {
   ): Promise<RouteWaypointResponse> {
     const routeWaypoint = await RouteWaypoint.create(data);
     return routeWaypoint.toJSON() as RouteWaypointResponse;
+  }
+
+  // New method for bulk waypoint creation
+  async createMultipleRouteWaypoints(
+    data: RouteWaypointBulkCreateData,
+  ): Promise<RouteWaypointResponse[]> {
+    return await sequelize.transaction(async (transaction: Transaction) => {
+      // Verify route exists
+      const route = await PatrolRoute.findByPk(data.routeId, { transaction });
+      if (!route) {
+        throw new NotFoundError('Route not found');
+      }
+
+      const waypointsData = data.waypoints.map((waypoint) => ({
+        ...waypoint,
+        routeId: data.routeId,
+      }));
+
+      const createdWaypoints = await RouteWaypoint.bulkCreate(waypointsData, {
+        transaction,
+        returning: true,
+      });
+
+      return createdWaypoints.map(
+        (waypoint) => waypoint.toJSON() as RouteWaypointResponse,
+      );
+    });
+  }
+
+  async createMultipleRouteWaypointsIndividually(
+    data: RouteWaypointBulkCreateData,
+  ): Promise<RouteWaypointResponse[]> {
+    return await sequelize.transaction(async (transaction: Transaction) => {
+      const route = await PatrolRoute.findByPk(data.routeId, { transaction });
+      if (!route) {
+        throw new NotFoundError('Route not found');
+      }
+
+      const createdWaypoints: RouteWaypointResponse[] = [];
+
+      for (const waypointData of data.waypoints) {
+        const waypoint = await RouteWaypoint.create(
+          {
+            ...waypointData,
+            routeId: data.routeId,
+          },
+          { transaction },
+        );
+        createdWaypoints.push(waypoint.toJSON() as RouteWaypointResponse);
+      }
+
+      return createdWaypoints;
+    });
   }
 
   async getRouteWaypointById(id: number): Promise<RouteWaypointResponse> {
@@ -104,6 +160,12 @@ class RouteWaypointService {
     }
 
     await routeWaypoint.destroy();
+  }
+
+  async deleteRouteWaypointsByRouteId(routeId: number): Promise<void> {
+    await RouteWaypoint.destroy({
+      where: { routeId },
+    });
   }
 }
 

@@ -68,6 +68,20 @@ export const createOverheatDetectionController = async (
 
       const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
+      if (
+        !name ||
+        !sessionId ||
+        !waypointId ||
+        !temperature ||
+        !confidenceScore
+      ) {
+        res.status(400).json({
+          message: 'Missing required fields',
+          success: false,
+        });
+        return;
+      }
+
       const result = await service.createOverheatDetectionWithImages({
         name: name.trim(),
         sessionId: parseInt(sessionId),
