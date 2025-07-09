@@ -5,7 +5,7 @@ import type {
   RouteWaypointCreateData,
   RouteWaypointUpdateData,
 } from '@/types/patrols/route-waypoint.js';
-import { handleError } from '@/utils/error.handler';
+import { handleError } from '@/utils/error.handler.js';
 
 const routeWaypointService = new RouteWaypointService();
 

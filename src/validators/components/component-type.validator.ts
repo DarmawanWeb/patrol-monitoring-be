@@ -32,13 +32,7 @@ export const updateComponentTypeValidators = [
   body('name')
     .optional()
     .isLength({ min: 3, max: 50 })
-    .withMessage('Name must be between 3 and 50 characters')
-    .custom(async (value) => {
-      if (value) {
-        await checkComponentTypeNameExists(value);
-      }
-      return true;
-    }),
+    .withMessage('Name must be between 3 and 50 characters'),
 
   body('icon')
     .optional()
