@@ -3,6 +3,7 @@ export interface WebSocketRobotData {
   location: {
     x: number;
     y: number;
+    heading: number;
   };
   speed: number;
   status: string;

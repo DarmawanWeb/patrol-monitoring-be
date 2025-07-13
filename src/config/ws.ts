@@ -11,7 +11,7 @@ const io = new Server(socketServer, {
   cors: {
     origin: env.CORS_ORIGIN || 'http://localhost:3000',
     methods: ['GET', 'POST'],
-    credentials: true,
+    credentials: false,
   },
 });
 
@@ -22,7 +22,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('robot:data', (robotData) => {
-    robotWs.storeWebsocketData(robotData);
+    logger.debug('Received robot data:', robotData);
+    // robotWs.storeWebsocketData(robotData);
     socket.broadcast.emit('robot:data', robotData);
   });
 
